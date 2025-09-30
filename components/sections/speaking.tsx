@@ -199,9 +199,9 @@ function TalkCard({ talk }: TalkCardProps) {
                 <ExternalLink size={14} />
               </Link>
             )}
-            {talk.links.video && (
+            {(talk.links as any).video && (
               <Link
-                href={talk.links.video}
+                href={(talk.links as any).video}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring"

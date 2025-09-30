@@ -101,14 +101,14 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
                 <ExternalLink size={12} />
               </Link>
             )}
-            {experience.links.project && (
+            {experience.links?.alpen && (
               <Link
-                href={experience.links.project}
+                href={experience.links.alpen}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring"
               >
-                <span>Project</span>
+                <span>Alpen Labs</span>
                 <ExternalLink size={12} />
               </Link>
             )}

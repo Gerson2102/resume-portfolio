@@ -158,9 +158,9 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
 
         {/* Links */}
         <div className="flex items-center space-x-4 pt-2">
-          {project.links.github && (
+          {(project.links as any).github && (
             <Link
-              href={project.links.github}
+              href={(project.links as any).github}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring"
@@ -169,9 +169,9 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
               <span className="text-sm">Code</span>
             </Link>
           )}
-          {project.links.demo && (
+          {(project.links as any).demo && (
             <Link
-              href={project.links.demo}
+              href={(project.links as any).demo}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring"
@@ -180,9 +180,9 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
               <span className="text-sm">Live Demo</span>
             </Link>
           )}
-          {project.links.devpost && (
+          {(project.links as any).devpost && (
             <Link
-              href={project.links.devpost}
+              href={(project.links as any).devpost}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring"
