@@ -1,0 +1,33 @@
+[
+  {
+    "id": "nethermind-internship",
+    "company": "Nethermind",
+    "role": "Rust Developer Intern",
+    "team": "Alpen Labs",
+    "duration": "3 months",
+    "period": "2025",
+    "type": "Internship",
+    "location": "Remote",
+    "description": "Focused internship working on Ethereum infrastructure for Alpen Labs, specifically contributing to core serialization protocols and performance optimizations.",
+    "responsibilities": [
+      "Converted Python-based SSZ serialization logic to Rust",
+      "Improved performance and memory safety of Ethereum infrastructure",
+      "Collaborated with international team on protocol specifications",
+      "Contributed to testing and documentation of core libraries"
+    ],
+    "achievements": [
+      "Successfully migrated critical serialization components to Rust",
+      "Contributed to production-ready Ethereum infrastructure",
+      "Demonstrated ability to work with complex protocol specifications"
+    ],
+    "technologies": ["Rust", "Python", "Ethereum", "SSZ", "Simple Serialization", "Protocol Development"],
+    "images": [
+      "/images/2025/experience/nethermind-logo.png"
+    ],
+    "links": {
+      "company": "https://nethermind.io",
+      "alpen": "https://alpenlabs.io"
+    },
+    "featured": true
+  }
+]

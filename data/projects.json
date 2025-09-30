@@ -1,0 +1,65 @@
+[
+  {
+    "id": "arkthemist",
+    "title": "Arkthemist",
+    "summary": "Arbitration-as-a-service platform for Web3 disputes",
+    "description": "A decentralized arbitration platform that provides fair, transparent dispute resolution for Web3 applications. Built on Starknet for low-cost, high-throughput arbitration services.",
+    "outcomes": ["3rd Best Starknet dApp", "Hackathon Winner 2025"],
+    "stack": ["Starknet", "Cairo", "React", "TypeScript", "Smart Contracts"],
+    "links": {
+      "github": "https://github.com/Arkthemist/Arkthemist"
+    },
+    "coverImage": "/images/2025/projects/arkthemist.png",
+    "gallery": [
+    ],
+    "featured": true,
+    "year": 2025
+  },
+  {
+    "id": "crypto-stocks-tinder",
+    "title": "Tinder Stock",
+    "summary": "Tinder-like interface for crypto stock discovery and trading",
+    "description": "A gamified approach to cryptocurrency portfolio building, using swipe mechanics to help users discover and buy crypto stocks based on their preferences and risk tolerance.",
+    "outcomes": ["2nd Place ETH Pura Vida", "$2,500 Prize"],
+    "stack": ["React Native", "Web3.js", "Node.js", "Express", "Chainlink"],
+    "links": {
+    },
+    "coverImage": "/images/2024/projects/image.png",
+    "gallery": [
+    ],
+    "featured": true,
+    "year": 2024
+  },
+  {
+    "id": "starknet-dojo-game",
+    "title": "NINE",
+    "summary": "Distributed AI agents that work everywhere with no-code UI",
+    "description": "Distributed AI agents that work everywhere with no-code UI.",
+    "outcomes": ["Nethermind", "Technical Achievement"],
+    "stack": ["Rust", "Agents", "No-code UI"],
+    "links": {
+      "github": "https://github.com/NethermindEth/nine"
+    },
+    "coverImage": "/images/2025/projects/nine.png",
+    "gallery": [
+    ],
+    "featured": false,
+    "year": 2025
+  },
+  {
+    "id": "ethereum-ssz-parser",
+    "title": "Ethereum SSZ Parser",
+    "summary": "Ethereum Simple Serialization parser for Alpen Labs",
+    "description": "Internship project at Nethermind involving the conversion of Python-based SSZ serialization logic to Rust for improved performance and memory safety in Ethereum infrastructure.",
+    "outcomes": ["Performance Improvement", "Professional Experience"],
+    "stack": ["Rust", "Python", "Ethereum", "SSZ", "Serialization"],
+    "links": {
+      "github": "https://github.com/AlpenLabs/ethereum-ssz-rs"
+    },
+    "coverImage": "/images/2025/projects/alpen.png",
+    "gallery": [
+    ],
+    "featured": false,
+    "year": 2025
+  }
+]

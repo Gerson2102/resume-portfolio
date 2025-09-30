@@ -1,0 +1,110 @@
+[
+  {
+    "id": "cairo-lang-testing-docs",
+    "repository": "starkware-libs/cairo",
+    "title": "Cairo Testing Macro Documentation",
+    "type": "Documentation",
+    "impact": "Improved testing experience for Cairo developers",
+    "description": "Added comprehensive documentation and examples for Cairo testing macro functions, helping developers understand how to write effective tests for their Cairo contracts.",
+    "tech": ["Cairo", "Documentation", "Testing", "Macros"],
+    "links": {
+      "pr": "https://github.com/starkware-libs/cairo/pull/6627",
+      "onlydust": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "reward": "$150",
+    "status": "Merged",
+    "date": "2024-12",
+    "maintainerFeedback": "Great examples for testing macros. This will help developers write better tests.",
+    "featured": true
+  },
+  {
+    "id": "raito-contribution",
+    "repository": "keep-starknet-strange/raito",
+    "title": "Bitcoin Light Client Implementation",
+    "type": "Feature",
+    "impact": "Contributing to Bitcoin verification on Starknet",
+    "description": "Contributed to the development of Raito, a Bitcoin light client implementation in Cairo, enabling Bitcoin block verification on Starknet.",
+    "tech": ["Cairo", "Bitcoin", "Cryptography", "Zero-Knowledge"],
+    "links": {
+      "pr": "https://github.com/starkware-bitcoin/raito/pulls?q=is%3Apr+is%3Aclosed+author%3AGerson2102",
+      "onlydust": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "reward": "$400",
+    "status": "Active",
+    "date": "2024-11",
+    "maintainerFeedback": "Solid contribution to Bitcoin verification logic.",
+    "featured": true
+  },
+  {
+    "id": "starkiro-contribution",
+    "repository": "KaizeNodeLabs/starkiro",
+    "title": "Cairo Scripts and Smart Contracts",
+    "type": "Feature",
+    "impact": "Enabling privacy-preserving transactions on Starknet",
+    "description": "Contributing to Starkiro, a Monero light client implementation in Cairo, bringing privacy-preserving transaction verification to Starknet.",
+    "tech": ["Cairo", "Monero", "Privacy", "Cryptography"],
+    "links": {
+      "pr": "https://github.com/KaizeNodeLabs/starkiro/pulls?q=is%3Apr+is%3Aclosed+author%3AGerson2102",
+      "onlydust": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "reward": "$350",
+    "status": "Active",
+    "date": "2024-10",
+    "maintainerFeedback": "Important work on privacy-preserving protocols.",
+    "featured": true
+  },
+  {
+    "id": "kakarot-zkvm-contribution",
+    "repository": "kkrt-labs/kakarot-rpc",
+    "title": "ZK Ethereum Virtual Machine Contributions",
+    "type": "Enhancement",
+    "impact": "Improving EVM compatibility on Starknet",
+    "description": "Contributing to KakarotZKEVM, an implementation of the Ethereum Virtual Machine in Cairo, enabling Ethereum smart contract execution on Starknet.",
+    "tech": ["Cairo", "EVM", "Ethereum", "Zero-Knowledge"],
+    "links": {
+      "pr": "https://github.com/kkrt-labs/kakarot-rpc/pulls?q=is%3Apr+author%3AGerson2102+is%3Aclosed",
+      "onlydust": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "reward": "$500",
+    "status": "Active",
+    "date": "2024-09",
+    "maintainerFeedback": "Excellent work on refactoring the codebase.",
+    "featured": true
+  },
+  {
+    "id": "trustless-work-contribution",
+    "repository": "trustless-work/trustless-work",
+    "title": "Decentralized Work Platform",
+    "type": "Feature",
+    "impact": "Building trustless freelancing infrastructure",
+    "description": "Contributing to Trustless Work, a decentralized platform for freelance work and payments, enabling trustless employment relationships on blockchain.",
+    "tech": ["Solidity", "Smart Contracts", "DeFi", "Web3"],
+    "links": {
+      "pr": "https://github.com/Trustless-Work/Trustless-Work-Smart-Escrow/pull/25",
+      "onlydust": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "reward": "$500",
+    "status": "Active",
+    "date": "2024-08",
+    "maintainerFeedback": "Great contribution to decentralized work infrastructure.",
+    "featured": true
+  },
+  {
+    "id": "starknet-foundry-contribution",
+    "repository": "foundry-rs/starknet-foundry",
+    "title": "Starknet Development Tools",
+    "type": "Enhancement",
+    "impact": "Improved developer tooling for Starknet ecosystem",
+    "description": "Contributing to Starknet Foundry, a blazing fast toolkit for developing Starknet contracts, improving testing and deployment workflows.",
+    "tech": ["Rust", "Cairo", "Developer Tools", "Testing"],
+    "links": {
+      "pr": "https://github.com/foundry-rs/starknet-foundry",
+      "onlydust": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "reward": "$250",
+    "status": "Merged",
+    "date": "2024-07",
+    "maintainerFeedback": "Valuable improvements to developer experience.",
+    "featured": false
+  }
+]

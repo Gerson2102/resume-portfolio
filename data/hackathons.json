@@ -1,0 +1,86 @@
+[
+  {
+    "id": "starknet-hacker-house-brussels",
+    "event": "Starknet Hacker House Brussels",
+    "date": "2024-07",
+    "location": "Brussels, Belgium",
+    "role": "Selected Participant",
+    "project": "On-Chain Game with Dojo",
+    "description": "Intensive 5-day hacker house focused on building with Starknet and Dojo framework. Built a fully on-chain game exploring persistent world mechanics.",
+    "outcomes": ["In-person Selection", "First EU Trip", "Technical Achievement"],
+    "significance": "Personal milestone - first international flight and European trip. Selected among competitive applicants for in-person participation.",
+    "tech": ["Starknet", "Dojo", "Cairo", "On-Chain Gaming"],
+    "images": [
+      "/images/2024/hackathons/brussels-hacker-house-group.jpg",
+      "/images/2024/hackathons/brussels-working-session.jpg",
+      "/images/2024/hackathons/brussels-presentation-moment.jpg",
+      "/images/2024/hackathons/brussels-venue-exterior.jpg"
+    ],
+    "links": {
+      "event": "https://starknet.io/hacker-house-brussels-2024"
+    },
+    "featured": true
+  },
+  {
+    "id": "eth-pura-vida-2024-winner",
+    "event": "ETH Pura Vida 2024",
+    "date": "2024-09",
+    "location": "San José, Costa Rica (Online)",
+    "role": "Participant & Winner",
+    "project": "CryptoSwipe - Tinder for Crypto Stocks",
+    "description": "Built a gamified cryptocurrency portfolio app using swipe mechanics similar to dating apps. Users discover and trade crypto assets based on preferences and risk tolerance.",
+    "outcomes": ["2nd Place Winner", "$2,500 Prize", "Community Recognition"],
+    "significance": "Major hackathon win in home country, validating product-market fit for crypto UX improvements.",
+    "tech": ["React Native", "Web3.js", "Node.js", "Express", "MongoDB"],
+    "images": [
+      "/images/2024/hackathons/eth-pura-vida-app-demo.png",
+      "/images/2024/hackathons/eth-pura-vida-award-ceremony.jpg",
+      "/images/2024/hackathons/eth-pura-vida-team-virtual.png"
+    ],
+    "links": {
+      "project": "https://devpost.com/software/cryptoswipe",
+      "demo": "https://crypto-swipe-demo.netlify.app"
+    },
+    "featured": true
+  },
+  {
+    "id": "arkthemist-hackathon-2025",
+    "event": "Starknet Hackathon 2025",
+    "date": "2025-01",
+    "location": "Online",
+    "role": "Solo Developer",
+    "project": "Arkthemist - Arbitration as a Service",
+    "description": "Developed a decentralized arbitration platform for Web3 disputes. Provides fair, transparent, and cost-effective dispute resolution using Starknet's scaling capabilities.",
+    "outcomes": ["3rd Best Starknet dApp", "Technical Excellence Award", "Judge Recognition"],
+    "significance": "Demonstrated ability to build complex DeFi infrastructure solo, addressing real Web3 problem.",
+    "tech": ["Starknet", "Cairo", "React", "TypeScript", "Smart Contracts"],
+    "images": [
+      "/images/2025/hackathons/arkthemist-stark-call.jpg",
+      "/images/2025/hackathons/arkthemist-architecture-diagram.png",
+      "/images/2025/hackathons/starknet-hackathon-winner-badge.png"
+    ],
+    "links": {
+      "project": "https://devpost.com/software/arkthemist",
+      "github": "https://github.com/Gerson2102/arkthemist"
+    },
+    "featured": true
+  },
+  {
+    "id": "various-starknet-hackathons",
+    "event": "Multiple Online Starknet Hackathons",
+    "date": "2024-ongoing",
+    "location": "Online",
+    "role": "Regular Participant",
+    "project": "Various Starknet Projects",
+    "description": "Consistent participation in Starknet ecosystem hackathons, experimenting with Cairo smart contracts, DeFi protocols, and developer tooling.",
+    "outcomes": ["Multiple Submissions", "Community Building", "Technical Growth"],
+    "significance": "Demonstrates commitment to Starknet ecosystem and continuous learning approach.",
+    "tech": ["Cairo", "Starknet", "DeFi", "Developer Tools"],
+    "images": [
+      "/images/2024/hackathons/starknet-hackathons-collage.jpg",
+      "/images/2024/hackathons/cairo-smart-contract-code.png"
+    ],
+    "links": {},
+    "featured": false
+  }
+]

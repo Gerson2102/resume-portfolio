@@ -1,0 +1,97 @@
+[
+  {
+    "id": "onlydust-starknet-fellowship-2025",
+    "organization": "OnlyDust",
+    "program": "Starknet Fellowship",
+    "cohort": "2025",
+    "duration": "3 months",
+    "stipend": "$1,000/month",
+    "description": "Competitive fellowship program supporting dedicated contributors to the Starknet ecosystem. Focus on core protocol development, developer tooling, and educational content creation.",
+    "achievements": [
+      "Strong maintainer feedback on contributions",
+      "Multiple merged PRs to core repositories",
+      "Mentorship of newer contributors"
+    ],
+    "focus": ["Starknet Core", "Cairo Development", "Developer Experience", "Protocol Optimization"],
+    "images": [
+      "/images/2025/fellowships/starknet-logo.png",
+      "/images/2025/fellowships/onlydust-contribution-dashboard.png",
+      "/images/2025/fellowships/starknet-core-pr-merged.png"
+    ],
+    "links": {
+      "program": "https://docs.onlydust.com/contributors-hiya/onlydust-fellowship",
+      "profile": "https://app.onlydust.com/u/Gerson2102"
+    },
+    "status": "Completed",
+    "featured": true
+  },
+  {
+    "id": "invisible-garden-2024",
+    "organization": "Invisible Garden",
+    "program": "Builder Residency",
+    "cohort": "2024",
+    "duration": "6 weeks",
+    "description": "Selective residency program focusing on cutting-edge research and development in Ethereum, Zero-Knowledge proofs, AI, and Cryptography. Bringing together builders, researchers, and visionaries.",
+    "achievements": [
+      "Collaborated with leading researchers",
+      "Built network within Ethereum research community"
+    ],
+    "focus": ["Ethereum Research", "Zero-Knowledge Proofs", "Cryptography", "AI Applications"],
+    "images": [
+      "/images/2024/fellowships/invisible-garden-cohort-2024.jpg",
+      "/images/2024/fellowships/invisible-garden-research-session.jpg",
+      "/images/2024/fellowships/invisible-garden-logo.png"
+    ],
+    "links": {
+      "program": "https://invisible.garden/chiang-mai-recap"
+    },
+    "status": "Completed",
+    "featured": true
+  },
+  {
+    "id": "invisible-garden-2025",
+    "organization": "Invisible Garden",
+    "program": "Builder Residency",
+    "cohort": "2025",
+    "duration": "6 weeks",
+    "description": "Selected again for the 2025 cohort, demonstrating continued value and growth. Focus on advanced cryptographic protocols and their practical implementations in Web3.",
+    "achievements": [
+      "Repeat selection demonstrates impact and growth",
+      "Advanced cryptographic protocol research",
+      "Mentorship role for new participants"
+    ],
+    "focus": ["Advanced Cryptography", "Protocol Design", "Web3 Infrastructure", "Research Leadership"],
+    "links": {
+      "program": "https://invisible.garden/"
+    },
+    "status": "Upcoming",
+    "significance": "Selected twice in consecutive years (2024 & 2025) - demonstrating exceptional performance and continuous value to the research community",
+    "featured": true
+  },
+  {
+    "id": "ethereum-devconnect-scholarship-2025",
+    "organization": "Ethereum Foundation",
+    "program": "Devconnect Argentina Scholarship",
+    "cohort": "2025",
+    "duration": "1 week",
+    "description": "Highly competitive scholarship program supporting <100 developers worldwide to attend Devconnect Argentina. Focus on core Ethereum development, research, and ecosystem building.",
+    "achievements": [
+      "Selected from global pool of applicants",
+      "Full travel and accommodation support",
+      "Access to core Ethereum developer community"
+    ],
+    "focus": ["Ethereum Core Development", "Research Collaboration", "Global Networking", "Protocol Evolution"],
+    "images": [
+      "/images/2025/fellowships/ethereum-foundation-logo.png",
+      "/images/2025/fellowships/devconnect-argentina-2025.jpg",
+      "/images/2025/fellowships/ethereum-devconnect-scholarship-certificate.png"
+    ],
+    "links": {
+      "event": "https://devconnect.org/argentina-2025",
+      "scholarship": "https://nxbn.ethereum.foundation/scholars"
+    },
+    "status": "Upcoming",
+    "significance": "Less than 100 developers selected globally",
+    "featured": true
+  }
+]

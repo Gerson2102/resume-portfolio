@@ -1,0 +1,43 @@
+[
+  {
+    "id": "eth-pura-vida-speaker",
+    "event": "ETH Pura Vida 2024",
+    "title": "Web3: Más allá del Casino",
+    "subtitle": "Web3 History: Beyond the Casino",
+    "date": "2024-09",
+    "location": "San José, Costa Rica",
+    "type": "Conference Talk",
+    "duration": "30 minutes",
+    "abstract": "A comprehensive journey through internet history leading to Web3 innovation, starting with the 2008-2009 financial crisis that sparked the creation of Bitcoin through Satoshi Nakamoto's whitepaper. Explored blockchain's true value beyond the casino culture of memecoins and scams, focusing on real-world applications that solve coordination problems. Discussed practical programming languages and development paths for developers interested in building meaningful Web3 applications that create genuine societal value.",
+    "keyTakeaways": [
+      "Blockchain's true value lies in solving coordination problems",
+      "Web3 UX must improve to achieve mainstream adoption",
+      "Latin America is uniquely positioned for Web3 innovation"
+    ],
+    "audience": "200+ developers, entrepreneurs, and blockchain enthusiasts",
+    "language": "Spanish",
+    "topics": ["Web3 Applications", "Real-World Use Cases", "Latin American Tech", "Web3 History"],
+    "images": [
+      "/images/hero/1730083623644.JPG",
+      "/images/2024/talks/me-eth.jpg",
+      "/images/2024/talks/eth-event-2024.jpg",
+      "/images/2024/talks/eth-event-sponsors.jpg"
+      
+    ],
+    "links": {
+      "slides": "https://www.canva.com/design/DAGTx3xIvyw/awZ1czpmp9oevra-QKoiuQ/edit?utm_content=DAGTx3xIvyw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
+      "event": "https://ethereum.cr/"
+    },
+    "testimonials": [
+      {
+        "author": "Event Organizer",
+        "text": "One of the most insightful talks about practical blockchain applications we've heard."
+      },
+      {
+        "author": "Attendee",
+        "text": "Finally, someone talking about blockchain beyond speculation!"
+      }
+    ],
+    "featured": true
+  }
+]
