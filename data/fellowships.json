@@ -12,7 +12,13 @@
       "Multiple merged PRs to core repositories",
       "Mentorship of newer contributors"
     ],
-    "focus": ["Starknet Core", "Cairo Development", "Developer Experience", "Protocol Optimization"],
+    "focus": [
+      "Starknet Core",
+      "Cairo Development",
+      "Developer Experience",
+      "Protocol Optimization"
+    ],
+    "logo": "/images/2025/fellowships/starknet-logo.png",
     "images": [
       "/images/2025/fellowships/starknet-logo.png",
       "/images/2025/fellowships/onlydust-contribution-dashboard.png",
@@ -36,11 +42,16 @@
       "Collaborated with leading researchers",
       "Built network within Ethereum research community"
     ],
-    "focus": ["Ethereum Research", "Zero-Knowledge Proofs", "Cryptography", "AI Applications"],
+    "focus": [
+      "Ethereum Research",
+      "Zero-Knowledge Proofs",
+      "Cryptography",
+      "AI Applications"
+    ],
+    "logo": "/images/2024/fellowships/invisible-garden-logo.png",
     "images": [
       "/images/2024/fellowships/invisible-garden-cohort-2024.jpg",
-      "/images/2024/fellowships/invisible-garden-research-session.jpg",
-      "/images/2024/fellowships/invisible-garden-logo.png"
+      "/images/2024/fellowships/invisible-garden-research-session.jpg"
     ],
     "links": {
       "program": "https://invisible.garden/chiang-mai-recap"
@@ -60,7 +71,13 @@
       "Advanced cryptographic protocol research",
       "Mentorship role for new participants"
     ],
-    "focus": ["Advanced Cryptography", "Protocol Design", "Web3 Infrastructure", "Research Leadership"],
+    "focus": [
+      "Advanced Cryptography",
+      "Protocol Design",
+      "Web3 Infrastructure",
+      "Research Leadership"
+    ],
+    "logo": "/images/2024/fellowships/invisible-garden-logo.png",
     "links": {
       "program": "https://invisible.garden/"
     },
@@ -80,7 +97,13 @@
       "Full travel and accommodation support",
       "Access to core Ethereum developer community"
     ],
-    "focus": ["Ethereum Core Development", "Research Collaboration", "Global Networking", "Protocol Evolution"],
+    "focus": [
+      "Ethereum Core Development",
+      "Research Collaboration",
+      "Global Networking",
+      "Protocol Evolution"
+    ],
+    "logo": "/images/2025/fellowships/ethereum-foundation-logo.png",
     "images": [
       "/images/2025/fellowships/ethereum-foundation-logo.png",
       "/images/2025/fellowships/devconnect-argentina-2025.jpg",

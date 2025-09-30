@@ -116,9 +116,9 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
         <div className="flex items-start justify-between mb-4">
           <div className="w-16 h-16 flex-shrink-0 bg-neutral-100 dark:bg-neutral-700 rounded-lg overflow-hidden">
-            {fellowship.logo ? (
+            {(fellowship as any).logo ? (
               <OptimizedImage
-                src={fellowship.logo}
+                src={(fellowship as any).logo}
                 alt={`${fellowship.organization} logo`}
                 width={64}
                 height={64}
@@ -216,9 +216,9 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
 
         {/* Links */}
         <div className="flex flex-wrap gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          {fellowship.links.program && (
+          {(fellowship.links as any).program && (
             <Link
-              href={fellowship.links.program}
+              href={(fellowship.links as any).program}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring"
@@ -227,9 +227,9 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
               <ExternalLink size={12} />
             </Link>
           )}
-          {fellowship.links.profile && (
+          {(fellowship.links as any).profile && (
             <Link
-              href={fellowship.links.profile}
+              href={(fellowship.links as any).profile}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring"
@@ -238,14 +238,25 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
               <ExternalLink size={12} />
             </Link>
           )}
-          {fellowship.links.scholarship && (
+          {(fellowship.links as any).scholarship && (
             <Link
-              href={fellowship.links.scholarship}
+              href={(fellowship.links as any).scholarship}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors text-sm focus-ring"
             >
               <span>Scholarship Info</span>
+              <ExternalLink size={12} />
+            </Link>
+          )}
+          {(fellowship.links as any).event && (
+            <Link
+              href={(fellowship.links as any).event}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors text-sm focus-ring"
+            >
+              <span>Event Details</span>
               <ExternalLink size={12} />
             </Link>
           )}

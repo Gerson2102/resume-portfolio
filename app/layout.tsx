@@ -72,6 +72,34 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Prevent wallet extension conflicts from breaking the app
+              if (typeof window !== 'undefined') {
+                const originalDefineProperty = Object.defineProperty;
+                Object.defineProperty = function(obj, prop, descriptor) {
+                  // Allow ethereum property to be redefined by extensions
+                  if (prop === 'ethereum') {
+                    try {
+                      return originalDefineProperty(obj, prop, {
+                        ...descriptor,
+                        configurable: true,
+                        writable: true
+                      });
+                    } catch (e) {
+                      // Silently ignore ethereum redefinition errors
+                      return obj[prop];
+                    }
+                  }
+                  return originalDefineProperty(obj, prop, descriptor);
+                };
+              }
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
