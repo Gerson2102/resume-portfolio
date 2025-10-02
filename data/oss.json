@@ -40,9 +40,9 @@
     "repository": "KaizeNodeLabs/starkiro",
     "title": "Cairo Scripts and Smart Contracts",
     "type": "Feature",
-    "impact": "Enabling privacy-preserving transactions on Starknet",
-    "description": "Contributing to Starkiro, a Monero light client implementation in Cairo, bringing privacy-preserving transaction verification to Starknet.",
-    "tech": ["Cairo", "Monero", "Privacy", "Cryptography"],
+    "impact": "Contributing to a set of examples for new developers to learn about Cairo",
+    "description": "Contributing to Starkiro, a set of scripts and smart contracts in Cairo as an example for new developers of how to build certain things on Starknet.",
+    "tech": ["Cairo", "Scripts", "Smart Contracts", "Examples", "Community"],
     "links": {
       "pr": "https://github.com/KaizeNodeLabs/starkiro/pulls?q=is%3Apr+is%3Aclosed+author%3AGerson2102",
       "onlydust": "https://app.onlydust.com/u/Gerson2102"
@@ -50,7 +50,7 @@
     "reward": "$350",
     "status": "Active",
     "date": "2024-10",
-    "maintainerFeedback": "Important work on privacy-preserving protocols.",
+    "maintainerFeedback": "Important work on examples for onboarding new developers to learn Cairo.",
     "featured": true
   },
   {
@@ -90,21 +90,21 @@
     "featured": true
   },
   {
-    "id": "starknet-foundry-contribution",
-    "repository": "foundry-rs/starknet-foundry",
-    "title": "Starknet Development Tools",
+    "id": "giza-agents-cli-auth-improvements",
+    "repository": "gizatechxyz/giza-agents",
+    "title": "Giza Agents CLI improvements",
     "type": "Enhancement",
-    "impact": "Improved developer tooling for Starknet ecosystem",
-    "description": "Contributing to Starknet Foundry, a blazing fast toolkit for developing Starknet contracts, improving testing and deployment workflows.",
-    "tech": ["Rust", "Cairo", "Developer Tools", "Testing"],
+    "impact": "Improved developer experience for Giza Agents CLI usage and onboarding",
+    "description": "Contributed fixes and enhancements addressing the linked issue to streamline the Giza Agents developer workflow, improving CLI reliability and usability around agent creation, authentication, and environment setup.",
+    "tech": ["Python", "CLI", "Developer Tools"],
     "links": {
-      "pr": "https://github.com/foundry-rs/starknet-foundry",
+      "pr": "https://github.com/gizatechxyz/giza-agents/pull/44",
       "onlydust": "https://app.onlydust.com/u/Gerson2102"
     },
-    "reward": "$250",
+    "reward": "$450",
     "status": "Merged",
-    "date": "2024-07",
+    "date": "2024-10",
     "maintainerFeedback": "Valuable improvements to developer experience.",
-    "featured": false
+    "featured": true
   }
 ]

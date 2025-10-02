@@ -88,3 +88,5 @@ export const CONTACT_INFO = {
   email: 'gersonloavas@gmail.com',
   location: 'Costa Rica'
 } as const
+
+export const RESUME_URL = 'https://docs.google.com/document/d/1P5qe1xyehWKOcOm5KRUHSzSF6CZN_k6J/edit'

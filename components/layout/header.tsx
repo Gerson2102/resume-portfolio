@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X, Github, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { SOCIAL_LINKS } from '@/lib/utils'
+import { SOCIAL_LINKS, RESUME_URL } from '@/lib/utils'
 
 const navigation = [
   { name: 'Projects', href: '#projects' },
@@ -89,7 +89,7 @@ export function Header() {
 
 
             <Link
-              href="https://docs.google.com/document/d/1P5qe1xyehWKOcOm5KRUHSzSF6CZN_k6J/edit"
+              href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary inline-flex items-center space-x-2"
@@ -144,7 +144,7 @@ export function Header() {
                 </div>
 
                 <Link
-                  href="https://docs.google.com/document/d/1P5qe1xyehWKOcOm5KRUHSzSF6CZN_k6J/edit"
+                  href={RESUME_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMobileMenuOpen(false)}

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Github, Twitter, Linkedin, MessageCircle, ExternalLink } from 'lucide-react'
-import { SOCIAL_LINKS, CONTACT_INFO } from '@/lib/utils'
+import { SOCIAL_LINKS, CONTACT_INFO, RESUME_URL } from '@/lib/utils'
 
 const socialIcons = {
   github: Github,
@@ -100,7 +100,9 @@ export function Footer() {
             <div className="flex items-center space-x-6 text-sm text-neutral-600 dark:text-neutral-400">
               <span>© 2025 Gerson. All rights reserved.</span>
               <Link
-                href="/resume"
+                href={RESUME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center space-x-1 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring"
               >
                 <span>Resume</span>
