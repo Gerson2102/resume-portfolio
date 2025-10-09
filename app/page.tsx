@@ -10,11 +10,11 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <ProjectsSection />
-      <OpenSourceSection />
-      <ExperienceSection />
-      <SpeakingSection />
       <FellowshipsSection />
+      <ExperienceSection />
+      <OpenSourceSection />
+      <SpeakingSection />
+      <ProjectsSection />
       <ContactSection />
     </>
   )
