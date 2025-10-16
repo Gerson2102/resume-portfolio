@@ -1,13 +1,68 @@
-import Link from 'next/link'
-import { ExternalLink, Calendar, MapPin, Users, Mic } from 'lucide-react'
-import { OptimizedImage } from '@/components/ui/image'
-import { Gallery } from '@/components/ui/lightbox'
-import { formatDate } from '@/lib/utils'
-import talksData from '@/data/talks.json'
+'use client';
+
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { ExternalLink, Calendar, MapPin, Users, Mic } from 'lucide-react';
+import { motion, m } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
+import { OptimizedImage } from '@/components/ui/image';
+import { Gallery } from '@/components/ui/lightbox';
+import { formatDate } from '@/lib/utils';
+import talksData from '@/data/talks.json';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function SpeakingSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const ctaTitleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Title animation
+      if (titleRef.current) {
+        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
+        gsap.from(splitTitle.chars, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 80%',
+          },
+          opacity: 0,
+          y: 20,
+          stagger: 0.03,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
+
+      // CTA section title animation
+      if (ctaTitleRef.current) {
+        const splitCtaTitle = new SplitType(ctaTitleRef.current, { types: 'chars' });
+        gsap.from(splitCtaTitle.chars, {
+          scrollTrigger: {
+            trigger: ctaTitleRef.current,
+            start: 'top 80%',
+          },
+          opacity: 0,
+          y: 20,
+          stagger: 0.03,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
   return (
-    <section id="speaking" className="section-padding bg-neutral-50 dark:bg-neutral-800">
+    <section ref={sectionRef} id="speaking" className="section-padding bg-neutral-50 dark:bg-neutral-800">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -15,7 +70,7 @@ export function SpeakingSection() {
             <Mic size={16} />
             <span>Speaking & Education</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             Sharing Knowledge
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
@@ -32,8 +87,8 @@ export function SpeakingSection() {
         </div>
 
         {/* Speaking Availability CTA */}
-        <div className="text-center mt-16 p-8 glass-card rounded-xl">
-          <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">
+        <div className="cta-card text-center mt-16 p-8 glass-card rounded-xl">
+          <h3 ref={ctaTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">
             Available for Speaking
           </h3>
           <p className="text-neutral-600 dark:text-neutral-300 mb-6 max-w-2xl mx-auto">
@@ -70,7 +125,15 @@ function TalkCard({ talk }: TalkCardProps) {
   }))
 
   return (
-    <article className="glass-card rounded-xl overflow-hidden">
+    <m.article
+      className="talk-card glass-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+      whileHover={{
+        y: -8,
+        scale: 1.01,
+        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+        transition: { duration: 0.3 },
+      }}
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         {/* Main Stage Image */}
         <div className="relative aspect-hero lg:aspect-square bg-neutral-200 dark:bg-neutral-700">
@@ -259,6 +322,6 @@ function TalkCard({ talk }: TalkCardProps) {
           />
         </div>
       )}
-    </article>
+    </m.article>
   )
 }

@@ -1,10 +1,11 @@
 import Link from 'next/link'
-import { Github, Twitter, Linkedin, MessageCircle, ExternalLink } from 'lucide-react'
+import { Github, Linkedin, MessageCircle, ExternalLink } from 'lucide-react'
+import { BsTwitterX } from 'react-icons/bs'
 import { SOCIAL_LINKS, CONTACT_INFO, RESUME_URL } from '@/lib/utils'
 
 const socialIcons = {
   github: Github,
-  twitter: Twitter,
+  twitter: BsTwitterX,
   linkedin: Linkedin,
   telegram: MessageCircle,
 }

@@ -1,16 +1,55 @@
-import Link from 'next/link'
-import { ExternalLink, Calendar, DollarSign, Award, Users } from 'lucide-react'
-import { OptimizedImage } from '@/components/ui/image'
-import { cn, formatDate } from '@/lib/utils'
-import fellowshipsData from '@/data/fellowships.json'
+'use client';
+
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { ExternalLink, Calendar, DollarSign, Award, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
+import { OptimizedImage } from '@/components/ui/image';
+import { cn, formatDate } from '@/lib/utils';
+import fellowshipsData from '@/data/fellowships.json';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function FellowshipsSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const activeFellowships = fellowshipsData.filter(f => f.status === 'Active')
   const upcomingFellowships = fellowshipsData.filter(f => f.status === 'Upcoming')
   const completedFellowships = fellowshipsData.filter(f => f.status === 'Completed')
 
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Title animation
+      if (titleRef.current) {
+        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
+        gsap.from(splitTitle.chars, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 80%',
+          },
+          opacity: 0,
+          y: 20,
+          stagger: 0.03,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="fellowships" className="section-padding bg-white dark:bg-neutral-900">
+    <section ref={sectionRef} id="fellowships" className="section-padding bg-white dark:bg-neutral-900">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -18,7 +57,7 @@ export function FellowshipsSection() {
             <Award size={16} />
             <span>Fellowships & Programs</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             Recognized Excellence
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
@@ -84,6 +123,8 @@ interface FellowshipCardProps {
 }
 
 function FellowshipCard({ fellowship }: FellowshipCardProps) {
+  const cardRef = useRef<HTMLElement>(null);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Active':
@@ -111,7 +152,16 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
   }
 
   return (
-    <article className="glass-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <motion.article
+      ref={cardRef}
+      className="fellowship-card glass-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+        transition: { duration: 0.3 },
+      }}
+    >
       {/* Header with Logo */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
         <div className="flex items-start justify-between mb-4">
@@ -263,6 +313,6 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
         </div>
       </div>
 
-    </article>
+    </motion.article>
   )
 }

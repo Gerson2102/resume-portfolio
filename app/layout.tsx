@@ -4,6 +4,9 @@ import './globals.css'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { SmoothScroll } from '@/components/ui/smooth-scroll'
+import { ScrollProgress } from '@/components/ui/scroll-progress'
+import { CustomCursor } from '@/components/ui/custom-cursor'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -108,13 +111,17 @@ export default function RootLayout({
           forcedTheme="dark"
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <SmoothScroll>
+            <ScrollProgress />
+            <CustomCursor />
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>
