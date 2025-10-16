@@ -1,17 +1,55 @@
-import Link from 'next/link'
-import { Github, ExternalLink, DollarSign, GitPullRequest, MessageSquare } from 'lucide-react'
-import { OptimizedImage } from '@/components/ui/image'
-import { cn, formatDate } from '@/lib/utils'
-import ossData from '@/data/oss.json'
+'use client';
+
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { Github, ExternalLink, DollarSign, GitPullRequest, MessageSquare } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
+import { OptimizedImage } from '@/components/ui/image';
+import { cn, formatDate } from '@/lib/utils';
+import ossData from '@/data/oss.json';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function OpenSourceSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const featuredContributions = ossData.filter(contrib => contrib.featured)
   const totalEarned = ossData.reduce((sum, contrib) => {
     return sum + parseFloat(contrib.reward.replace('$', '').replace(',', ''))
   }, 0)
 
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (titleRef.current) {
+        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
+        gsap.from(splitTitle.chars, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 80%',
+          },
+          opacity: 0,
+          y: 20,
+          stagger: 0.03,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="oss" className="section-padding bg-neutral-50 dark:bg-neutral-800">
+    <section ref={sectionRef} id="oss" className="section-padding bg-neutral-50 dark:bg-neutral-800">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -19,7 +57,7 @@ export function OpenSourceSection() {
             <Github size={16} />
             <span>Open Source Impact</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             Contributing to the Starknet Ecosystem
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto mb-8">
@@ -151,7 +189,15 @@ function ContributionCard({ contribution }: ContributionCardProps) {
   }
 
   return (
-    <article className="glass-card rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <motion.article
+      className="oss-card glass-card rounded-xl p-6 hover:shadow-lg transition-all duration-300"
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+        transition: { duration: 0.3 },
+      }}
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-2">
@@ -236,6 +282,6 @@ function ContributionCard({ contribution }: ContributionCardProps) {
           {formatDate(contribution.date)}
         </div>
       </div>
-    </article>
-  )
+    </motion.article>
+  );
 }

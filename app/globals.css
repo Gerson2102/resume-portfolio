@@ -7,17 +7,23 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 80px;
   }
 
   body {
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
   }
 
-  @supports (scroll-behavior: smooth) {
-    html {
-      scroll-behavior: smooth;
+  /* Respect user motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }
@@ -86,6 +92,85 @@
   @keyframes scaleIn {
     0% { transform: scale(0.9); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+  }
+
+  /* Premium animation utilities */
+  .animate-gradient {
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Glass morphism utilities */
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10;
+  }
+
+  .glass-card-premium {
+    @apply backdrop-blur-lg bg-gradient-to-br from-white/80 to-white/60 dark:from-neutral-900/80 dark:to-neutral-800/60 border border-white/20 dark:border-neutral-700/30 shadow-2xl;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-blue {
+    @apply bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)];
+  }
+
+  .hover-tilt {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  /* Custom cursor styles */
+  .cursor-dot {
+    @apply fixed w-2 h-2 bg-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
+  }
+
+  .cursor-ring {
+    @apply fixed w-8 h-8 border-2 border-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
   }
 }
 

@@ -1,19 +1,74 @@
-import Link from 'next/link'
-import { Github, ExternalLink, Award, Calendar } from 'lucide-react'
-import { OptimizedImage } from '@/components/ui/image'
-import { cn } from '@/lib/utils'
-import projectsData from '@/data/projects.json'
+'use client';
+
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { Github, ExternalLink, Award, Calendar } from 'lucide-react';
+import { motion, m } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
+import { OptimizedImage } from '@/components/ui/image';
+import { cn } from '@/lib/utils';
+import projectsData from '@/data/projects.json';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function ProjectsSection() {
-  const featuredProjects = projectsData.filter(project => project.featured)
-  const otherProjects = projectsData.filter(project => !project.featured)
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const additionalTitleRef = useRef<HTMLHeadingElement>(null);
+  const featuredProjects = projectsData.filter(project => project.featured);
+  const otherProjects = projectsData.filter(project => !project.featured);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Title animation
+      if (titleRef.current) {
+        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
+        gsap.from(splitTitle.chars, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 80%',
+          },
+          opacity: 0,
+          y: 20,
+          stagger: 0.03,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
+
+      // Additional contributions title animation
+      if (additionalTitleRef.current) {
+        const splitAdditionalTitle = new SplitType(additionalTitleRef.current, { types: 'chars' });
+        gsap.from(splitAdditionalTitle.chars, {
+          scrollTrigger: {
+            trigger: additionalTitleRef.current,
+            start: 'top 80%',
+          },
+          opacity: 0,
+          y: 20,
+          stagger: 0.03,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="projects" className="section-padding bg-white dark:bg-neutral-900">
+    <section ref={sectionRef} id="projects" className="section-padding bg-white dark:bg-neutral-900">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             Featured Projects
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
@@ -29,6 +84,7 @@ export function ProjectsSection() {
               key={project.id}
               project={project}
               featured={true}
+              className="featured-project-card"
             />
           ))}
         </div>
@@ -37,7 +93,7 @@ export function ProjectsSection() {
         {otherProjects.length > 0 && (
           <>
             <div className="text-center mb-12">
-              <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
+              <h3 ref={additionalTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
                 Additional Contributions
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
@@ -51,6 +107,7 @@ export function ProjectsSection() {
                   key={project.id}
                   project={project}
                   featured={false}
+                  className="other-project-card"
                 />
               ))}
             </div>
@@ -83,11 +140,17 @@ interface ProjectCardProps {
 
 function ProjectCard({ project, featured, className }: ProjectCardProps) {
   return (
-    <article
+    <m.article
       className={cn(
-        "group bg-neutral-50 dark:bg-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1",
+        "group bg-neutral-50 dark:bg-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300",
         className
       )}
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+        transition: { duration: 0.3 },
+      }}
     >
       {/* Project Image */}
       <div className="relative aspect-hero overflow-hidden bg-neutral-200 dark:bg-neutral-700">
@@ -193,6 +256,6 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
           )}
         </div>
       </div>
-    </article>
+    </m.article>
   )
 }
