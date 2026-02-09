@@ -1,91 +1,83 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useCallback } from 'react';
 
 export function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const mousePos = useRef({ x: 0, y: 0 });
+  const dotPos = useRef({ x: 0, y: 0 });
+  const ringPos = useRef({ x: 0, y: 0 });
+  const isHovering = useRef(false);
+  const rafId = useRef<number>(0);
+
+  const animate = useCallback(() => {
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    // Smooth interpolation
+    dotPos.current.x += (mousePos.current.x - dotPos.current.x) * 0.35;
+    dotPos.current.y += (mousePos.current.y - dotPos.current.y) * 0.35;
+    ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.15;
+    ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.15;
+
+    const scale = isHovering.current ? 1.5 : 1;
+    dot.style.transform = `translate3d(${dotPos.current.x - 4}px, ${dotPos.current.y - 4}px, 0) scale(${scale})`;
+    ring.style.transform = `translate3d(${ringPos.current.x - 16}px, ${ringPos.current.y - 16}px, 0) scale(${scale})`;
+
+    rafId.current = requestAnimationFrame(animate);
+  }, []);
 
   useEffect(() => {
     // Check if device is mobile
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024 || 'ontouchstart' in window);
+    const isMobile = window.innerWidth < 1024 || 'ontouchstart' in window;
+    if (isMobile) return;
+
+    const onMouseMove = (e: MouseEvent) => {
+      mousePos.current.x = e.clientX;
+      mousePos.current.y = e.clientY;
     };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    const onEnter = () => { isHovering.current = true; };
+    const onLeave = () => { isHovering.current = false; };
 
-    if (isMobile) {
-      return;
-    }
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-    const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
-
-    window.addEventListener('mousemove', updateMousePosition);
-
-    // Add hover listeners to interactive elements
     const interactiveElements = document.querySelectorAll(
       'a, button, .interactive, [role="button"]'
     );
-
     interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('mouseleave', onLeave);
     });
 
+    rafId.current = requestAnimationFrame(animate);
+
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition);
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('mousemove', onMouseMove);
+      cancelAnimationFrame(rafId.current);
       interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
       });
     };
-  }, [isMobile]);
+  }, [animate]);
 
-  if (isMobile) {
-    return null; // Don't render on mobile
+  // SSR-safe: only check on client
+  if (typeof window !== 'undefined' && (window.innerWidth < 1024 || 'ontouchstart' in window)) {
+    return null;
   }
 
   return (
     <>
-      {/* Inner dot */}
-      <motion.div
-        className="fixed w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        animate={{
-          x: mousePosition.x - 4,
-          y: mousePosition.y - 4,
-          scale: isHovering ? 1.5 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 500,
-          damping: 28,
-          mass: 0.5,
-        }}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full pointer-events-none z-9999 mix-blend-difference will-change-transform"
       />
-
-      {/* Outer ring */}
-      <motion.div
-        className="fixed w-8 h-8 border-2 border-blue-500 dark:border-blue-400 rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        animate={{
-          x: mousePosition.x - 16,
-          y: mousePosition.y - 16,
-          scale: isHovering ? 1.5 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 150,
-          damping: 15,
-          mass: 0.1,
-        }}
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 w-8 h-8 border-2 border-blue-500 dark:border-blue-400 rounded-full pointer-events-none z-9999 mix-blend-difference will-change-transform"
       />
     </>
   );

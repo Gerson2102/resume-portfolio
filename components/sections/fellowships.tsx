@@ -30,17 +30,21 @@ export function FellowshipsSection() {
       // Title animation
       if (titleRef.current) {
         const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.from(splitTitle.chars, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
     }, sectionRef);
@@ -165,7 +169,7 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
       {/* Header with Logo */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
         <div className="flex items-start justify-between mb-4">
-          <div className="w-16 h-16 flex-shrink-0 bg-neutral-100 dark:bg-neutral-700 rounded-lg overflow-hidden">
+          <div className="w-16 h-16 shrink-0 bg-neutral-100 dark:bg-neutral-700 rounded-lg overflow-hidden">
             {(fellowship as any).logo ? (
               <OptimizedImage
                 src={(fellowship as any).logo}
@@ -255,7 +259,7 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
           <ul className="space-y-2">
             {fellowship.achievements.map((achievement, index) => (
               <li key={index} className="flex items-start space-x-3">
-                <div className="w-1.5 h-1.5 bg-primary-500 rounded-full mt-2 flex-shrink-0" />
+                <div className="w-1.5 h-1.5 bg-primary-500 rounded-full mt-2 shrink-0" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">
                   {achievement}
                 </span>
@@ -271,7 +275,7 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
               href={(fellowship.links as any).program}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring"
+              className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring py-2"
             >
               <span>Program Details</span>
               <ExternalLink size={12} />
@@ -282,7 +286,7 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
               href={(fellowship.links as any).profile}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring"
+              className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring py-2"
             >
               <span>My Profile</span>
               <ExternalLink size={12} />
@@ -293,7 +297,7 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
               href={(fellowship.links as any).scholarship}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors text-sm focus-ring"
+              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors text-sm focus-ring py-2"
             >
               <span>Scholarship Info</span>
               <ExternalLink size={12} />
@@ -304,7 +308,7 @@ function FellowshipCard({ fellowship }: FellowshipCardProps) {
               href={(fellowship.links as any).event}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors text-sm focus-ring"
+              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors text-sm focus-ring py-2"
             >
               <span>Event Details</span>
               <ExternalLink size={12} />

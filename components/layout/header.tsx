@@ -10,6 +10,7 @@ const navigation = [
   { name: 'Projects', href: '#projects' },
   { name: 'Open Source', href: '#oss' },
   { name: 'Experience', href: '#experience' },
+  { name: 'Fellowships', href: '#fellowships' },
   { name: 'Speaking', href: '#speaking' },
 ]
 
@@ -22,9 +23,20 @@ export function Header() {
       setIsScrolled(window.scrollY > 20)
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isMobileMenuOpen])
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false)
@@ -41,8 +53,8 @@ export function Header() {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled
-          ? 'bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-b border-neutral-200/50 dark:border-neutral-700/50'
+        isScrolled || isMobileMenuOpen
+          ? 'bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md border-b border-neutral-200/50 dark:border-neutral-700/50'
           : 'bg-transparent'
       )}
     >

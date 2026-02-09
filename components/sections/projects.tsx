@@ -30,33 +30,41 @@ export function ProjectsSection() {
       // Title animation
       if (titleRef.current) {
         const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.from(splitTitle.chars, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
       // Additional contributions title animation
       if (additionalTitleRef.current) {
         const splitAdditionalTitle = new SplitType(additionalTitleRef.current, { types: 'chars' });
-        gsap.from(splitAdditionalTitle.chars, {
-          scrollTrigger: {
-            trigger: additionalTitleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitAdditionalTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: additionalTitleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
     }, sectionRef);
 
@@ -173,7 +181,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
 
         {/* Year Badge */}
         <div className="absolute top-4 left-4">
-          <div className="flex items-center space-x-1 px-3 py-1 bg-black/50 text-white text-sm font-medium rounded-full backdrop-blur-sm">
+          <div className="flex items-center space-x-1 px-3 py-1 bg-black/50 text-white text-sm font-medium rounded-full backdrop-blur-xs">
             <Calendar size={14} />
             <span>{project.year}</span>
           </div>
@@ -184,7 +192,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
           {project.outcomes.map((outcome, index) => (
             <div
               key={index}
-              className="flex items-center space-x-1 px-3 py-1 bg-primary-500/90 text-white text-sm font-medium rounded-full backdrop-blur-sm"
+              className="flex items-center space-x-1 px-3 py-1 bg-primary-500/90 text-white text-sm font-medium rounded-full backdrop-blur-xs"
             >
               <Award size={14} />
               <span>{outcome}</span>
@@ -226,7 +234,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
               href={(project.links as any).github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring"
+              className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring py-2"
             >
               <Github size={16} />
               <span className="text-sm">Code</span>
@@ -237,7 +245,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
               href={(project.links as any).demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring"
+              className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring py-2"
             >
               <ExternalLink size={16} />
               <span className="text-sm">Live Demo</span>
@@ -248,7 +256,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
               href={(project.links as any).devpost}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring"
+              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring py-2"
             >
               <ExternalLink size={16} />
               <span className="text-sm">Devpost</span>

@@ -29,33 +29,41 @@ export function SpeakingSection() {
       // Title animation
       if (titleRef.current) {
         const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.from(splitTitle.chars, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
       // CTA section title animation
       if (ctaTitleRef.current) {
         const splitCtaTitle = new SplitType(ctaTitleRef.current, { types: 'chars' });
-        gsap.from(splitCtaTitle.chars, {
-          scrollTrigger: {
-            trigger: ctaTitleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitCtaTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: ctaTitleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
     }, sectionRef);
 
@@ -157,14 +165,14 @@ function TalkCard({ talk }: TalkCardProps) {
 
           {/* Event Badge */}
           <div className="absolute top-4 left-4">
-            <div className="px-4 py-2 bg-black/50 backdrop-blur-sm text-white text-sm font-medium rounded-full">
+            <div className="px-4 py-2 bg-black/50 backdrop-blur-xs text-white text-sm font-medium rounded-full">
               {talk.event}
             </div>
           </div>
 
           {/* Language Badge */}
           <div className="absolute top-4 right-4">
-            <div className="px-3 py-1 bg-primary-500/90 backdrop-blur-sm text-white text-xs font-medium rounded-full">
+            <div className="px-3 py-1 bg-primary-500/90 backdrop-blur-xs text-white text-xs font-medium rounded-full">
               {talk.language}
             </div>
           </div>
@@ -223,7 +231,7 @@ function TalkCard({ talk }: TalkCardProps) {
             <ul className="space-y-2">
               {talk.keyTakeaways.map((takeaway, index) => (
                 <li key={index} className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-accent-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 bg-accent-500 rounded-full mt-2 shrink-0" />
                   <span className="text-neutral-700 dark:text-neutral-300">
                     {takeaway}
                   </span>
@@ -256,7 +264,7 @@ function TalkCard({ talk }: TalkCardProps) {
                 href={talk.links.slides}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring"
+                className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring py-2"
               >
                 <span>View Slides</span>
                 <ExternalLink size={14} />
@@ -267,7 +275,7 @@ function TalkCard({ talk }: TalkCardProps) {
                 href={(talk.links as any).video}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring"
+                className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring py-2"
               >
                 <span>Watch Video</span>
                 <ExternalLink size={14} />
@@ -278,7 +286,7 @@ function TalkCard({ talk }: TalkCardProps) {
                 href={talk.links.event}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring"
+                className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring py-2"
               >
                 <span>Event Page</span>
                 <ExternalLink size={14} />

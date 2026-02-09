@@ -30,17 +30,21 @@ export function OpenSourceSection() {
     const ctx = gsap.context(() => {
       if (titleRef.current) {
         const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.from(splitTitle.chars, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
     }, sectionRef);
@@ -105,7 +109,7 @@ export function OpenSourceSection() {
                 href="https://app.onlydust.com/u/Gerson2102"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring"
+                className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring py-2"
               >
                 <span>View Profile</span>
                 <ExternalLink size={14} />
@@ -263,7 +267,7 @@ function ContributionCard({ contribution }: ContributionCardProps) {
             href={contribution.links.pr}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring"
+            className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring py-2"
           >
             <GitPullRequest size={14} />
             <span>View PR</span>
@@ -272,7 +276,7 @@ function ContributionCard({ contribution }: ContributionCardProps) {
             href={contribution.links.onlydust}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring"
+            className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring py-2"
           >
             <ExternalLink size={14} />
             <span>OnlyDust</span>

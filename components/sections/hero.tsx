@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { MessageCircle, Github, Linkedin } from 'lucide-react';
-import { BsTwitterX } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
@@ -11,9 +10,17 @@ import { OptimizedImage } from '@/components/ui/image';
 import { SOCIAL_LINKS, CONTACT_INFO } from '@/lib/utils';
 import statsData from '@/data/stats.json';
 
+function XIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
 const socialIcons = {
   github: Github,
-  twitter: BsTwitterX,
+  twitter: XIcon,
   linkedin: Linkedin,
   telegram: MessageCircle,
 };
@@ -212,9 +219,9 @@ export function HeroSection() {
           sizes="100vw"
         />
         {/* Multi-layer gradient overlays for enhanced text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/15 to-black/35" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent md:from-black/55 md:via-black/20 md:to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/10" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/25 via-black/15 to-black/35" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/65 via-black/30 to-transparent md:from-black/55 md:via-black/20 md:to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-br from-black/20 via-transparent to-black/10" />
       </div>
 
       {/* Hero Content */}
@@ -224,19 +231,19 @@ export function HeroSection() {
           <div className="space-y-6 mb-8">
             <h1
               ref={nameRef}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl [text-shadow:_2px_2px_8px_rgb(0_0_0_/_80%)]"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl [text-shadow:2px_2px_8px_rgb(0_0_0/80%)]"
             >
               Gerson
             </h1>
             <p
               ref={titleRef}
-              className="text-xl md:text-2xl text-white/95 max-w-2xl font-light drop-shadow-lg [text-shadow:_1px_1px_4px_rgb(0_0_0_/_70%)]"
+              className="text-xl md:text-2xl text-white/95 max-w-2xl font-light drop-shadow-lg [text-shadow:1px_1px_4px_rgb(0_0_0/70%)]"
             >
               Web3 Developer & Open Source Contributor
             </p>
             <p
               ref={descriptionRef}
-              className="text-lg text-white/90 max-w-3xl leading-relaxed drop-shadow-md [text-shadow:_1px_1px_3px_rgb(0_0_0_/_60%)]"
+              className="text-lg text-white/90 max-w-3xl leading-relaxed drop-shadow-md [text-shadow:1px_1px_3px_rgb(0_0_0/60%)]"
             >
               Building the future of decentralized applications with{' '}
               <strong>Starknet</strong>, contributing to open source, and speaking about
@@ -249,17 +256,17 @@ export function HeroSection() {
             {metrics.map((metric, index) => (
               <motion.div
                 key={index}
-                className="metric-card text-center backdrop-blur-sm bg-white/5 rounded-lg p-3 border border-white/10 hover-lift"
+                className="metric-card text-center backdrop-blur-xs bg-white/5 rounded-lg p-3 border border-white/10 hover-lift"
                 whileHover={{
                   scale: 1.05,
                   backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   transition: { duration: 0.3 },
                 }}
               >
-                <div className="text-2xl md:text-3xl font-bold text-white mb-1 drop-shadow-lg [text-shadow:_1px_1px_4px_rgb(0_0_0_/_70%)]">
+                <div className="text-2xl md:text-3xl font-bold text-white mb-1 drop-shadow-lg [text-shadow:1px_1px_4px_rgb(0_0_0/70%)]">
                   {metric.value}
                 </div>
-                <div className="text-sm md:text-base text-white/85 drop-shadow-sm [text-shadow:_1px_1px_2px_rgb(0_0_0_/_50%)]">
+                <div className="text-sm md:text-base text-white/85 drop-shadow-xs [text-shadow:1px_1px_2px_rgb(0_0_0/50%)]">
                   {metric.label}
                 </div>
               </motion.div>
@@ -306,7 +313,7 @@ export function HeroSection() {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white transition-all duration-200 focus-ring block"
+                    className="p-3 rounded-full bg-white/10 backdrop-blur-xs hover:bg-white/20 text-white transition-all duration-200 focus-ring block"
                     aria-label={`Contact on ${platform}`}
                   >
                     <Icon size={20} />
@@ -319,11 +326,18 @@ export function HeroSection() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <button
+        onClick={() => {
+          const next = document.getElementById('fellowships');
+          next?.scrollIntoView({ behavior: 'smooth' });
+        }}
+        className="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer focus-ring rounded-full"
+        aria-label="Scroll to next section"
+      >
         <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
           <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse" />
         </div>
-      </div>
+      </button>
     </section>
   );
 }

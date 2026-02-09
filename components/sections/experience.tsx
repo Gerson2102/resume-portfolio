@@ -26,17 +26,21 @@ export function ExperienceSection() {
       // Title animation
       if (titleRef.current) {
         const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.from(splitTitle.chars, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
     }, sectionRef);
@@ -148,7 +152,7 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
                   href={experience.links.company}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring"
+                  className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring py-2"
                 >
                   <span>{experience.company}</span>
                   <ExternalLink size={12} />
@@ -161,7 +165,7 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
                   href={experience.links.alpen}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring"
+                  className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring py-2"
                 >
                   <span>Alpen Labs</span>
                   <ExternalLink size={12} />
@@ -186,7 +190,7 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
             <ul className="space-y-2">
               {experience.responsibilities.map((responsibility, index) => (
                 <li key={index} className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 shrink-0" />
                   <span className="text-neutral-700 dark:text-neutral-300">
                     {responsibility}
                   </span>
@@ -208,7 +212,7 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
                   whileHover={{ scale: 1.03, x: 5 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                     <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>

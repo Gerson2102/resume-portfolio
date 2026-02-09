@@ -9,18 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Suppress wallet extension errors during development
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-    return config;
-  },
   // For GitHub Pages deployment under a custom domain, leave these commented
   // For deployment under username.github.io/repository-name, uncomment and adjust:
   // basePath: '/repository-name',

@@ -1,9 +1,254 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  --color-primary-950: #082f49;
+
+  --color-accent-50: #fef7ee;
+  --color-accent-100: #fdedd3;
+  --color-accent-200: #fbd7a5;
+  --color-accent-300: #f8bb6d;
+  --color-accent-400: #f59333;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+  --color-accent-700: #c2410c;
+  --color-accent-800: #9a3412;
+  --color-accent-900: #7c2d12;
+  --color-accent-950: #431407;
+
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0a0a0a;
+
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  --aspect-photo: 4/3;
+  --aspect-hero: 16/9;
+  --aspect-portrait: 3/4;
+  --aspect-square: 1/1;
+
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-scale-in: scaleIn 0.3s ease-out;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUp {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes scaleIn {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@utility animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+@utility animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+@utility image-hover-scale {
+  @apply transition-transform duration-300 ease-out hover:scale-105;
+}
+
+@utility gradient-overlay {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+
+  .dark & {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+  }
+}
+
+@utility glass-card {
+  @apply backdrop-blur-xs bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/50 dark:border-neutral-700/50;
+}
+
+@utility photo-card {
+  @apply overflow-hidden rounded-lg shadow-xs hover:shadow-lg transition-all duration-300;
+
+  & img {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+}
+
+@utility animate-gradient {
+  /* Premium animation utilities */
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@utility animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@utility animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@utility glass-effect {
+  /* Glass morphism utilities */
+  @apply backdrop-blur-xl bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10;
+}
+
+@utility glass-card-premium {
+  @apply backdrop-blur-lg bg-linear-to-br from-white/80 to-white/60 dark:from-neutral-900/80 dark:to-neutral-800/60 border border-white/20 dark:border-neutral-700/30 shadow-2xl;
+}
+
+@utility gradient-text {
+  /* Gradient text */
+  @apply bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+}
+
+@utility gradient-text-blue {
+  @apply bg-linear-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent;
+}
+
+@utility hover-lift {
+  /* Hover effects */
+  @apply transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl;
+}
+
+@utility hover-glow {
+  @apply transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)];
+}
+
+@utility hover-tilt {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+@utility cursor-dot {
+  /* Custom cursor styles */
+  @apply fixed w-2 h-2 bg-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
+}
+
+@utility cursor-ring {
+  @apply fixed w-8 h-8 border-2 border-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
+}
+
+@utility section-padding {
+  @apply px-6 py-16 md:px-8 lg:px-12 xl:px-16;
+}
+
+@utility container-max {
+  @apply max-w-7xl mx-auto;
+}
+
+@utility btn-primary {
+  @apply bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200;
+}
+
+@utility btn-secondary {
+  @apply bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-medium px-6 py-3 rounded-lg transition-colors duration-200;
+}
+
+@utility badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+@utility badge-primary {
+  @apply badge bg-primary-100 text-primary-800 dark:bg-primary-900/50 dark:text-primary-200;
+}
+
+@utility badge-accent {
+  @apply badge bg-accent-100 text-accent-800 dark:bg-accent-900/50 dark:text-accent-200;
+}
+
+@utility badge-neutral {
+  @apply badge bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200;
+}
+
+@utility focus-ring {
+  /* Focus styles for accessibility */
+  @apply focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900;
+}
+
+@utility image-loading {
+  /* Image loading states */
+  @apply animate-pulse bg-neutral-200 dark:bg-neutral-800;
+}
 
 @layer base {
   html {
@@ -28,194 +273,24 @@
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.5s ease-out;
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.3s ease-out;
-  }
-
-  .image-hover-scale {
-    @apply transition-transform duration-300 ease-out hover:scale-105;
-  }
-
-  .gradient-overlay {
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      transparent 40%,
-      rgba(0, 0, 0, 0.7) 100%
-    );
-  }
-
-  .dark .gradient-overlay {
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      transparent 40%,
-      rgba(0, 0, 0, 0.8) 100%
-    );
-  }
-
-  .glass-card {
-    @apply backdrop-blur-sm bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/50 dark:border-neutral-700/50;
-  }
-
-  .photo-card {
-    @apply overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300;
-  }
-
-  .photo-card img {
-    @apply transition-transform duration-300 hover:scale-105;
-  }
-
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes slideUp {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
-
-  @keyframes scaleIn {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
-  }
-
-  /* Premium animation utilities */
-  .animate-gradient {
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-  }
-
-  .animate-shimmer {
-    background-size: 200% 100%;
-    animation: shimmer 2s ease-in-out infinite;
-  }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
-  }
-
-  /* Glass morphism utilities */
-  .glass-effect {
-    @apply backdrop-blur-xl bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10;
-  }
-
-  .glass-card-premium {
-    @apply backdrop-blur-lg bg-gradient-to-br from-white/80 to-white/60 dark:from-neutral-900/80 dark:to-neutral-800/60 border border-white/20 dark:border-neutral-700/30 shadow-2xl;
-  }
-
-  /* Gradient text */
-  .gradient-text {
-    @apply bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
-  }
-
-  .gradient-text-blue {
-    @apply bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent;
-  }
-
-  /* Hover effects */
-  .hover-lift {
-    @apply transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl;
-  }
-
-  .hover-glow {
-    @apply transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)];
-  }
-
-  .hover-tilt {
-    @apply transition-transform duration-300 hover:scale-105;
-  }
-
-  /* Custom cursor styles */
-  .cursor-dot {
-    @apply fixed w-2 h-2 bg-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
-  }
-
-  .cursor-ring {
-    @apply fixed w-8 h-8 border-2 border-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
-  }
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-@layer components {
-  .section-padding {
-    @apply px-6 py-16 md:px-8 lg:px-12 xl:px-16;
-  }
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
 
-  .container-max {
-    @apply max-w-7xl mx-auto;
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
 
-  .btn-primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200;
-  }
-
-  .btn-secondary {
-    @apply bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-medium px-6 py-3 rounded-lg transition-colors duration-200;
-  }
-
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
-  }
-
-  .badge-primary {
-    @apply badge bg-primary-100 text-primary-800 dark:bg-primary-900/50 dark:text-primary-200;
-  }
-
-  .badge-accent {
-    @apply badge bg-accent-100 text-accent-800 dark:bg-accent-900/50 dark:text-accent-200;
-  }
-
-  .badge-neutral {
-    @apply badge bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200;
-  }
-
-  /* Focus styles for accessibility */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900;
-  }
-
-  /* Image loading states */
-  .image-loading {
-    @apply animate-pulse bg-neutral-200 dark:bg-neutral-800;
-  }
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
 }
 
 /* Print styles for PDF export */

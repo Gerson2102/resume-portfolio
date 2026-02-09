@@ -74,7 +74,7 @@ export function Lightbox({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xs animate-fade-in"
       onClick={onClose}
     >
       {/* Close button */}
@@ -210,7 +210,11 @@ export function Gallery({
           <div
             key={index}
             className="photo-card cursor-pointer"
+            role="button"
+            tabIndex={0}
             onClick={() => openLightbox(index)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(index); } }}
+            aria-label={image.alt}
           >
             <OptimizedImage
               src={image.src}

@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { SmoothScroll } from '@/components/ui/smooth-scroll'
-import { ScrollProgress } from '@/components/ui/scroll-progress'
 import { CustomCursor } from '@/components/ui/custom-cursor'
 
 const inter = Inter({ subsets: ['latin'] })
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://gerson-portfolio.vercel.app'),
@@ -103,7 +103,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${jetbrainsMono.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -112,8 +112,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SmoothScroll>
-            <ScrollProgress />
-            <CustomCursor />
+<CustomCursor />
             <div className="flex flex-col min-h-screen">
               <Header />
               <main className="flex-1">

@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { MessageCircle, Mail, Calendar, MapPin, Github, Linkedin } from 'lucide-react';
-import { BsTwitterX } from 'react-icons/bs';
 import { motion, m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,9 +13,17 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+function XIcon({ size = 24 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
 const socialIcons = {
   github: Github,
-  twitter: BsTwitterX,
+  twitter: XIcon,
   linkedin: Linkedin,
   telegram: MessageCircle,
 }
@@ -35,49 +42,61 @@ export function ContactSection() {
       // Main title animation
       if (titleRef.current) {
         const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.from(splitTitle.chars, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
       // Opportunities title animation
       if (opportunitiesTitleRef.current) {
         const splitOpportunitiesTitle = new SplitType(opportunitiesTitleRef.current, { types: 'chars' });
-        gsap.from(splitOpportunitiesTitle.chars, {
-          scrollTrigger: {
-            trigger: opportunitiesTitleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitOpportunitiesTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: opportunitiesTitleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
 
       // Contact title animation
       if (contactTitleRef.current) {
         const splitContactTitle = new SplitType(contactTitleRef.current, { types: 'chars' });
-        gsap.from(splitContactTitle.chars, {
-          scrollTrigger: {
-            trigger: contactTitleRef.current,
-            start: 'top 80%',
-          },
-          opacity: 0,
-          y: 20,
-          stagger: 0.03,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
+        gsap.fromTo(splitContactTitle.chars,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: contactTitleRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: 'power2.out',
+          }
+        );
       }
     }, sectionRef);
 
@@ -216,6 +235,8 @@ export function ContactSection() {
               <div>
                 <Link
                   href="https://calendly.com/gersonloavas/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="font-semibold text-neutral-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-ring block mb-1"
                 >
                   Schedule a call

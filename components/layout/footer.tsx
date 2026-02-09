@@ -1,11 +1,18 @@
 import Link from 'next/link'
 import { Github, Linkedin, MessageCircle, ExternalLink } from 'lucide-react'
-import { BsTwitterX } from 'react-icons/bs'
 import { SOCIAL_LINKS, CONTACT_INFO, RESUME_URL } from '@/lib/utils'
+
+function XIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 const socialIcons = {
   github: Github,
-  twitter: BsTwitterX,
+  twitter: XIcon,
   linkedin: Linkedin,
   telegram: MessageCircle,
 }
@@ -99,7 +106,7 @@ export function Footer() {
 
             {/* Copyright & Links */}
             <div className="flex items-center space-x-6 text-sm text-neutral-600 dark:text-neutral-400">
-              <span>© 2025 Gerson. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} Gerson. All rights reserved.</span>
               <Link
                 href={RESUME_URL}
                 target="_blank"
