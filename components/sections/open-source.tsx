@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Github, ExternalLink, DollarSign, GitPullRequest, MessageSquare } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Github, ExternalLink, DollarSign, GitPullRequest, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
@@ -18,11 +18,42 @@ if (typeof window !== 'undefined') {
 export function OpenSourceSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const featuredContributions = ossData.filter(contrib => contrib.featured)
-  const totalEarned = ossData.reduce((sum, contrib) => {
-    return sum + parseFloat(contrib.reward.replace('$', '').replace(',', ''))
-  }, 0)
+  const carouselWrapperRef = useRef<HTMLDivElement>(null);
+  const featuredContributions = ossData.filter(contrib => contrib.featured);
+  const totalCards = featuredContributions.length;
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const goToNext = useCallback(() => {
+    setActiveIndex(prev => (prev + 1) % totalCards);
+  }, [totalCards]);
+
+  const goToPrev = useCallback(() => {
+    setActiveIndex(prev => (prev - 1 + totalCards) % totalCards);
+  }, [totalCards]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goToPrev();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goToNext();
+    }
+  }, [goToPrev, goToNext]);
+
+  // Derive visible cards: [left, center, right]
+  const visibleIndices = [
+    (activeIndex - 1 + totalCards) % totalCards,
+    activeIndex,
+    (activeIndex + 1) % totalCards,
+  ];
+  const visibleCards = visibleIndices.map(i => ({
+    ...featuredContributions[i],
+    originalIndex: i,
+  }));
+
+  // GSAP entrance animation
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
@@ -47,6 +78,22 @@ export function OpenSourceSection() {
         );
       }
 
+      if (carouselWrapperRef.current) {
+        gsap.fromTo(carouselWrapperRef.current,
+          { opacity: 0, y: 50 },
+          {
+            scrollTrigger: {
+              trigger: carouselWrapperRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+          }
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -133,9 +180,165 @@ export function OpenSourceSection() {
             Key Contributions
           </h3>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {featuredContributions.map((contribution) => (
-              <ContributionCard key={contribution.id} contribution={contribution} />
+          <div
+            ref={carouselWrapperRef}
+            className="relative"
+            role="region"
+            aria-label="Key contributions carousel"
+            aria-roledescription="carousel"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+          >
+            {/* Desktop Carousel (3 cards) */}
+            <div className="hidden lg:flex items-center justify-center gap-8 overflow-hidden py-4">
+              <AnimatePresence mode="popLayout">
+                {visibleCards.map((contribution, positionIndex) => {
+                  const isCenter = positionIndex === 1;
+                  return (
+                    <motion.div
+                      key={contribution.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                      animate={{
+                        opacity: isCenter ? 1 : 0.45,
+                        scale: isCenter ? 1 : 0.9,
+                        y: isCenter ? 0 : 16,
+                        zIndex: isCenter ? 2 : 1,
+                        filter: isCenter ? 'blur(0px)' : 'blur(2px)',
+                      }}
+                      exit={{ opacity: 0, scale: 0.85, y: -20 }}
+                      transition={{
+                        duration: 0.5,
+                        ease: [0.4, 0, 0.2, 1],
+                        layout: { duration: 0.5 },
+                      }}
+                      className={cn(
+                        'flex-shrink-0',
+                        isCenter ? 'w-[460px]' : 'w-[400px]'
+                      )}
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label={`Contribution ${contribution.originalIndex + 1} of ${totalCards}`}
+                    >
+                      <ContributionCard
+                        contribution={contribution}
+                        isCenter={isCenter}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+
+            {/* Mobile Carousel (single card with swipe) */}
+            <div className="lg:hidden flex justify-center overflow-hidden py-4">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={featuredContributions[activeIndex].id}
+                  initial={{ opacity: 0, x: 60 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -60 }}
+                  transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x > 80) goToPrev();
+                    else if (info.offset.x < -80) goToNext();
+                  }}
+                  className="w-[90vw] md:w-[80vw] max-w-[460px]"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`Contribution ${activeIndex + 1} of ${totalCards}`}
+                >
+                  <ContributionCard
+                    contribution={featuredContributions[activeIndex]}
+                    isCenter={true}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Arrow Buttons (desktop only) */}
+            <motion.button
+              onClick={goToPrev}
+              aria-label="Previous contribution"
+              whileTap={{ scale: 0.9 }}
+              className="absolute top-1/2 -translate-y-1/2 left-2 xl:-left-5 hidden lg:flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-200"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: 'rgba(255, 255, 255, 0.4)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.1)';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
+              }}
+            >
+              <ChevronLeft size={20} />
+            </motion.button>
+
+            <motion.button
+              onClick={goToNext}
+              aria-label="Next contribution"
+              whileTap={{ scale: 0.9 }}
+              className="absolute top-1/2 -translate-y-1/2 right-2 xl:-right-5 hidden lg:flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-200"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: 'rgba(255, 255, 255, 0.4)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.1)';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
+              }}
+            >
+              <ChevronRight size={20} />
+            </motion.button>
+          </div>
+
+          {/* Dot Indicators */}
+          <div className="flex justify-center gap-2 pt-2" role="tablist" aria-label="Carousel navigation">
+            {featuredContributions.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={activeIndex === i}
+                aria-label={`Go to contribution ${i + 1}`}
+                onClick={() => setActiveIndex(i)}
+                className="relative h-2 rounded-full cursor-pointer transition-colors"
+              >
+                <motion.div
+                  layout
+                  className={cn(
+                    'h-2 rounded-full',
+                    activeIndex === i ? 'bg-primary-400' : 'bg-neutral-600'
+                  )}
+                  style={activeIndex === i ? {
+                    width: 24,
+                    boxShadow: '0 0 8px rgba(56, 189, 248, 0.4)',
+                  } : {
+                    width: 8,
+                  }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                />
+              </button>
             ))}
           </div>
         </div>
@@ -159,9 +362,10 @@ export function OpenSourceSection() {
 
 interface ContributionCardProps {
   contribution: typeof ossData[0]
+  isCenter: boolean
 }
 
-function ContributionCard({ contribution }: ContributionCardProps) {
+function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
   const getTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
       case 'bug fix':
@@ -192,43 +396,52 @@ function ContributionCard({ contribution }: ContributionCardProps) {
     }
   }
 
+  const displayedTech = contribution.tech.slice(0, 4);
+
   return (
     <motion.article
-      className="oss-card glass-card rounded-xl p-6 hover:shadow-lg transition-all duration-300"
-      whileHover={{
-        y: -8,
-        scale: 1.02,
-        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
-        transition: { duration: 0.3 },
-      }}
+      className={cn(
+        'rounded-xl p-6 min-h-[440px] flex flex-col transition-[border-color,box-shadow] duration-300',
+        isCenter
+          ? 'backdrop-blur-xs bg-white/[0.06] border border-[rgba(56,189,248,0.3)]'
+          : 'glass-card'
+      )}
+      style={isCenter ? {
+        boxShadow: '0 0 15px rgba(56, 189, 248, 0.1), 0 0 30px rgba(56, 189, 248, 0.05)',
+      } : undefined}
+      whileHover={isCenter ? {
+        y: -4,
+        boxShadow: '0 0 30px rgba(56, 189, 248, 0.2), 0 20px 40px rgba(0, 0, 0, 0.3)',
+        transition: { duration: 0.3, ease: 'easeOut' },
+      } : undefined}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl">{getTypeIcon(contribution.type)}</span>
-          <div>
-            <h4 className="font-semibold text-neutral-900 dark:text-white">
+        <div className="flex items-center space-x-2 min-w-0 flex-1">
+          <span className="text-2xl flex-shrink-0">{getTypeIcon(contribution.type)}</span>
+          <div className="min-w-0">
+            <h4 className="font-semibold text-neutral-900 dark:text-white truncate">
               {contribution.title}
             </h4>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
               {contribution.repository}
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-1 px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200 text-sm font-medium rounded-full">
+        <div className="flex items-center space-x-1 px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200 text-sm font-medium rounded-full flex-shrink-0 ml-2">
           <DollarSign size={12} />
           <span>{contribution.reward}</span>
         </div>
       </div>
 
       {/* Content */}
-      <p className="text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
+      <p className="text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed line-clamp-3">
         {contribution.description}
       </p>
 
       {/* Impact */}
       <div className="mb-4 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
-        <p className="text-primary-800 dark:text-primary-200 text-sm font-medium">
+        <p className="text-primary-800 dark:text-primary-200 text-sm font-medium line-clamp-2">
           <strong>Impact:</strong> {contribution.impact}
         </p>
       </div>
@@ -238,7 +451,7 @@ function ContributionCard({ contribution }: ContributionCardProps) {
         <span className={cn('badge text-xs', getTypeColor(contribution.type))}>
           {contribution.type}
         </span>
-        {contribution.tech.map((tech) => (
+        {displayedTech.map((tech) => (
           <span key={tech} className="badge-neutral text-xs">
             {tech}
           </span>
@@ -254,14 +467,14 @@ function ContributionCard({ contribution }: ContributionCardProps) {
               Maintainer Feedback
             </span>
           </div>
-          <p className="text-sm text-neutral-700 dark:text-neutral-300 italic">
-            "{contribution.maintainerFeedback}"
+          <p className="text-sm text-neutral-700 dark:text-neutral-300 italic line-clamp-2">
+            &quot;{contribution.maintainerFeedback}&quot;
           </p>
         </div>
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-600">
+      <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-600 mt-auto">
         <div className="flex items-center space-x-4">
           <Link
             href={contribution.links.pr}
@@ -271,15 +484,6 @@ function ContributionCard({ contribution }: ContributionCardProps) {
           >
             <GitPullRequest size={14} />
             <span>View PR</span>
-          </Link>
-          <Link
-            href={contribution.links.onlydust}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring py-2"
-          >
-            <ExternalLink size={14} />
-            <span>OnlyDust</span>
           </Link>
         </div>
         <div className="text-xs text-neutral-500 dark:text-neutral-400">

@@ -293,6 +293,15 @@
   50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
 }
 
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@utility animate-blink-cursor {
+  animation: blink-cursor 530ms step-end infinite;
+}
+
 /* Print styles for PDF export */
 @media print {
   .no-print {
