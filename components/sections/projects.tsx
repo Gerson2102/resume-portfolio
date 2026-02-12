@@ -161,7 +161,10 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
       }}
     >
       {/* Project Image */}
-      <div className="relative aspect-hero overflow-hidden bg-neutral-200 dark:bg-neutral-700">
+      <div className={cn(
+        "relative overflow-hidden bg-neutral-200 dark:bg-neutral-700",
+        featured ? "aspect-video" : "aspect-hero"
+      )}>
         {project.coverImage ? (
           <OptimizedImage
             src={project.coverImage}
@@ -202,15 +205,15 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
       </div>
 
       {/* Project Content */}
-      <div className="p-6 space-y-4">
+      <div className={cn("space-y-3", featured ? "p-5" : "p-6")}>
         <div>
           <h3 className={cn(
-            "font-bold text-neutral-900 dark:text-white mb-2",
-            featured ? "text-2xl" : "text-xl"
+            "font-bold text-neutral-900 dark:text-white mb-1.5",
+            featured ? "text-xl" : "text-xl"
           )}>
             {project.title}
           </h3>
-          <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
             {featured ? project.description : project.summary}
           </p>
         </div>
@@ -228,7 +231,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
         </div>
 
         {/* Links */}
-        <div className="flex items-center space-x-4 pt-2">
+        <div className="flex items-center space-x-4 pt-1">
           {(project.links as any).github && (
             <Link
               href={(project.links as any).github}

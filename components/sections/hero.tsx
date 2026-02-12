@@ -35,6 +35,13 @@ function Cursor({ isTyping, fading }: { isTyping: boolean; fading: boolean }) {
   );
 }
 
+function renderWithBold(text: string) {
+  const parts = text.split(/(EVM|Starknet)/g);
+  return parts.map((part, i) =>
+    part === 'EVM' || part === 'Starknet' ? <strong key={i}>{part}</strong> : part
+  );
+}
+
 type TypingPhase = 'name' | 'subtitle' | 'description' | 'done';
 
 const fullName = 'Gerson';
@@ -284,7 +291,7 @@ export function HeroSection() {
                 {fullSubtitle}
               </p>
               <p className="text-lg text-white/90 max-w-3xl leading-relaxed drop-shadow-md [text-shadow:1px_1px_3px_rgb(0_0_0/60%)]">
-                {fullDescription}
+                {renderWithBold(fullDescription)}
               </p>
             </div>
 
@@ -307,7 +314,7 @@ export function HeroSection() {
               {/* Description — visible once subtitle phase is done */}
               {(currentPhase === 'description' || currentPhase === 'done') && (
                 <p className="text-lg text-white/90 max-w-3xl leading-relaxed drop-shadow-md [text-shadow:1px_1px_3px_rgb(0_0_0/60%)]">
-                  {displayedDescription}
+                  {renderWithBold(displayedDescription)}
                   {currentPhase === 'description' && <Cursor isTyping={isTyping} fading={false} />}
                   {currentPhase === 'done' && showCursor && <Cursor isTyping={false} fading={cursorFading} />}
                 </p>
