@@ -9,7 +9,7 @@
     "links": {
       "github": "https://github.com/Arkthemist/Arkthemist"
     },
-    "coverImage": "/images/2025/projects/arkthemist.png",
+    "coverImage": "/images/2025/projects/arkthemist.webp",
     "gallery": [
     ],
     "featured": true,
@@ -24,7 +24,7 @@
     "stack": ["React Native", "Web3.js", "Node.js", "Express", "Chainlink"],
     "links": {
     },
-    "coverImage": "/images/2024/projects/image.png",
+    "coverImage": "/images/2024/projects/image.webp",
     "gallery": [
     ],
     "featured": true,
@@ -40,7 +40,7 @@
     "links": {
       "github": "https://github.com/NethermindEth/nine"
     },
-    "coverImage": "/images/2025/projects/nine.png",
+    "coverImage": "/images/2025/projects/nine.webp",
     "gallery": [
     ],
     "featured": false,
@@ -56,7 +56,7 @@
     "links": {
       "github": "https://github.com/AlpenLabs/ethereum-ssz-rs"
     },
-    "coverImage": "/images/2025/projects/alpen.png",
+    "coverImage": "/images/2025/projects/alpen.webp",
     "gallery": [
     ],
     "featured": false,

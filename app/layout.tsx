@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ['latin'] })
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://gerson-portfolio.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://gersonloaiza.com'),
   title: 'Gerson - Web3 Developer & Open Source Contributor',
   description: 'Web3 developer from Costa Rica specializing in Starknet ecosystem. 20+ OSS contributions, multiple hackathon wins, OnlyDust Fellowship recipient.',
   keywords: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://gerson-portfolio.vercel.app',
+    url: 'https://gersonloaiza.com',
     title: 'Gerson - Web3 Developer & Open Source Contributor',
     description: 'Web3 developer from Costa Rica specializing in Starknet ecosystem. 20+ OSS contributions, multiple hackathon wins.',
     siteName: 'Gerson Portfolio',
@@ -76,6 +76,28 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="manifest" href="/manifest.json" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ProfilePage',
+              mainEntity: {
+                '@type': 'Person',
+                name: 'Gerson',
+                jobTitle: 'Web3 Developer',
+                url: 'https://gersonloaiza.com',
+                sameAs: [
+                  'https://github.com/Gerson2102',
+                  'https://x.com/Glv_exe02',
+                  'https://www.linkedin.com/in/gerson-lv/',
+                ],
+              },
+            }),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

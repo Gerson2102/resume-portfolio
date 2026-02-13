@@ -1,0 +1,16 @@
+{
+  "name": "Gerson - Web3 Developer",
+  "short_name": "Gerson",
+  "description": "Web3 developer from Costa Rica specializing in the Starknet ecosystem.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#171717",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -265,7 +265,7 @@ export function HeroSection() {
       {/* Hero Background Image */}
       <div ref={imageRef} className="absolute inset-0 z-0" style={{ opacity: 0 }}>
         <OptimizedImage
-          src="/images/hero/1730083623644.JPG"
+          src="/images/hero/1730083623644.webp"
           alt="Gerson - Web3 Developer and Open Source Contributor"
           fill
           priority={true}
@@ -284,9 +284,9 @@ export function HeroSection() {
           <div className="relative mb-8">
             {/* Invisible placeholder reserving full height */}
             <div className="invisible space-y-6" aria-hidden="true">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl [text-shadow:2px_2px_8px_rgb(0_0_0/80%)]">
+              <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl [text-shadow:2px_2px_8px_rgb(0_0_0/80%)]">
                 {fullName}|
-              </h1>
+              </div>
               <p className="text-xl md:text-2xl text-white/95 max-w-2xl font-light drop-shadow-lg [text-shadow:1px_1px_4px_rgb(0_0_0/70%)]">
                 {fullSubtitle}
               </p>

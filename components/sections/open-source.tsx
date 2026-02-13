@@ -216,7 +216,7 @@ export function OpenSourceSection() {
               </Link>
             </div>
             <OptimizedImage
-              src="/images/2024/oss/image.png"
+              src="/images/2024/oss/image.webp"
               alt="GitHub/OnlyDust contribution graph showing 494 contributions in the last year"
               width={1200}
               height={300}
