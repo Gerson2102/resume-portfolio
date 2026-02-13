@@ -15,6 +15,21 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 35 : -35,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -35 : 35,
+    opacity: 0,
+  }),
+};
+
 export function OpenSourceSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -23,14 +38,36 @@ export function OpenSourceSection() {
   const totalCards = featuredContributions.length;
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [hasSwiped, setHasSwiped] = useState(false);
+
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const goToNext = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection(1);
     setActiveIndex(prev => (prev + 1) % totalCards);
-  }, [totalCards]);
+    setTimeout(() => setIsAnimating(false), 350);
+  }, [isAnimating, totalCards]);
 
   const goToPrev = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection(-1);
     setActiveIndex(prev => (prev - 1 + totalCards) % totalCards);
-  }, [totalCards]);
+    setTimeout(() => setIsAnimating(false), 350);
+  }, [isAnimating, totalCards]);
+
+  const goToIndex = useCallback((index: number) => {
+    if (isAnimating || index === activeIndex) return;
+    setIsAnimating(true);
+    setDirection(index > activeIndex ? 1 : -1);
+    setActiveIndex(index);
+    setTimeout(() => setIsAnimating(false), 350);
+  }, [isAnimating, activeIndex]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
@@ -41,6 +78,22 @@ export function OpenSourceSection() {
       goToNext();
     }
   }, [goToPrev, goToNext]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+    const delta = touchStartX.current - touchEndX.current;
+    const threshold = 50;
+
+    if (Math.abs(delta) > threshold) {
+      if (!hasSwiped) setHasSwiped(true);
+      if (delta > 0) goToNext();
+      else goToPrev();
+    }
+  }, [goToNext, goToPrev, hasSwiped]);
 
   // Derive visible cards: [left, center, right]
   const visibleIndices = [
@@ -120,7 +173,7 @@ export function OpenSourceSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
             <div className="text-center">
               <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
-                300+
+                <CountUp end={300} suffix="+" duration={1.6} />
               </div>
               <div className="text-neutral-600 dark:text-neutral-400">
                 Contributions
@@ -128,7 +181,7 @@ export function OpenSourceSection() {
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
-                $10,000+
+                <CountUp end={10000} prefix="$" suffix="+" separator="," duration={1.8} />
               </div>
               <div className="text-neutral-600 dark:text-neutral-400">
                 Earned
@@ -136,7 +189,7 @@ export function OpenSourceSection() {
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
-                100%
+                <CountUp end={100} suffix="%" duration={1.4} />
               </div>
               <div className="text-neutral-600 dark:text-neutral-400">
                 Merge Rate
@@ -189,62 +242,85 @@ export function OpenSourceSection() {
             tabIndex={0}
             onKeyDown={handleKeyDown}
           >
-            {/* Desktop Carousel (3 cards) */}
+            {/* Desktop Carousel (3 cards) — stable slots, content crossfades */}
             <div className="hidden lg:flex items-center justify-center gap-8 overflow-hidden py-4">
-              <AnimatePresence mode="popLayout">
-                {visibleCards.map((contribution, positionIndex) => {
-                  const isCenter = positionIndex === 1;
-                  return (
-                    <motion.div
-                      key={contribution.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.85, y: 30 }}
-                      animate={{
-                        opacity: isCenter ? 1 : 0.45,
-                        scale: isCenter ? 1 : 0.9,
-                        y: isCenter ? 0 : 16,
-                        zIndex: isCenter ? 2 : 1,
-                        filter: isCenter ? 'blur(0px)' : 'blur(2px)',
-                      }}
-                      exit={{ opacity: 0, scale: 0.85, y: -20 }}
-                      transition={{
-                        duration: 0.5,
-                        ease: [0.4, 0, 0.2, 1],
-                        layout: { duration: 0.5 },
-                      }}
-                      className={cn(
-                        'flex-shrink-0',
-                        isCenter ? 'w-[460px]' : 'w-[400px]'
-                      )}
-                      role="group"
-                      aria-roledescription="slide"
-                      aria-label={`Contribution ${contribution.originalIndex + 1} of ${totalCards}`}
-                    >
+              {[0, 1, 2].map((slotIndex) => {
+                const isCenter = slotIndex === 1;
+                const contribution = visibleCards[slotIndex];
+                return (
+                  <motion.div
+                    key={slotIndex}
+                    animate={{
+                      opacity: isCenter ? 1 : 0.5,
+                      scale: isCenter ? 1 : 0.92,
+                      y: isCenter ? 0 : 12,
+                      filter: isCenter ? 'blur(0px)' : 'blur(1.5px)',
+                      borderColor: isCenter
+                        ? 'rgba(56, 189, 248, 0.35)'
+                        : 'rgba(255, 255, 255, 0.06)',
+                      boxShadow: isCenter
+                        ? '0 0 20px rgba(56, 189, 248, 0.12), 0 0 40px rgba(56, 189, 248, 0.04)'
+                        : '0 4px 12px rgba(0, 0, 0, 0.2)',
+                    }}
+                    transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                    className={cn(
+                      'flex-shrink-0 overflow-hidden rounded-xl',
+                      isCenter ? 'w-[460px] z-[2]' : 'w-[400px] z-[1]'
+                    )}
+                    style={{ willChange: 'transform, opacity, filter' }}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`Contribution ${contribution.originalIndex + 1} of ${totalCards}`}
+                  >
+                    {isCenter ? (
+                      <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+                        <motion.div
+                          key={contribution.id}
+                          custom={direction}
+                          variants={slideVariants}
+                          initial="enter"
+                          animate="center"
+                          exit="exit"
+                          transition={{
+                            x: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+                            opacity: { duration: 0.25 },
+                          }}
+                          style={{ willChange: 'transform, opacity' }}
+                        >
+                          <ContributionCard
+                            contribution={contribution}
+                            isCenter={true}
+                          />
+                        </motion.div>
+                      </AnimatePresence>
+                    ) : (
                       <ContributionCard
                         contribution={contribution}
-                        isCenter={isCenter}
+                        isCenter={false}
                       />
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
 
             {/* Mobile Carousel (single card with swipe) */}
-            <div className="lg:hidden flex justify-center overflow-hidden py-4">
-              <AnimatePresence mode="wait">
+            <div
+              className="lg:hidden flex justify-center overflow-hidden py-4"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <AnimatePresence mode="popLayout" custom={direction} initial={false}>
                 <motion.div
                   key={featuredContributions[activeIndex].id}
-                  initial={{ opacity: 0, x: 60 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -60 }}
-                  transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.2}
-                  onDragEnd={(_, info) => {
-                    if (info.offset.x > 80) goToPrev();
-                    else if (info.offset.x < -80) goToNext();
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+                    opacity: { duration: 0.25 },
                   }}
                   className="w-[90vw] md:w-[80vw] max-w-[460px]"
                   role="group"
@@ -259,86 +335,77 @@ export function OpenSourceSection() {
               </AnimatePresence>
             </div>
 
+            {/* Swipe hint (mobile only) */}
+            <motion.p
+              className="lg:hidden text-center text-xs text-neutral-500 mt-2"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: hasSwiped ? 0 : 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              Swipe to explore
+            </motion.p>
+
             {/* Arrow Buttons (desktop only) */}
             <motion.button
               onClick={goToPrev}
               aria-label="Previous contribution"
-              whileTap={{ scale: 0.9 }}
-              className="absolute top-1/2 -translate-y-1/2 left-2 xl:-left-5 hidden lg:flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-200"
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: 'rgba(255, 255, 255, 0.4)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
-                e.currentTarget.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.1)';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
-              }}
+              disabled={isAnimating}
+              whileHover={{ scale: 1.08, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ duration: 0.15 }}
+              className={cn(
+                'absolute top-1/2 -translate-y-1/2 left-2 xl:-left-5',
+                'hidden lg:flex items-center justify-center',
+                'w-10 h-10 rounded-full cursor-pointer',
+                'border border-white/10 bg-white/5',
+                'text-neutral-400 hover:text-white',
+                'disabled:opacity-30 disabled:cursor-not-allowed'
+              )}
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={18} />
             </motion.button>
 
             <motion.button
               onClick={goToNext}
               aria-label="Next contribution"
-              whileTap={{ scale: 0.9 }}
-              className="absolute top-1/2 -translate-y-1/2 right-2 xl:-right-5 hidden lg:flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-200"
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: 'rgba(255, 255, 255, 0.4)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
-                e.currentTarget.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.1)';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
-              }}
+              disabled={isAnimating}
+              whileHover={{ scale: 1.08, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ duration: 0.15 }}
+              className={cn(
+                'absolute top-1/2 -translate-y-1/2 right-2 xl:-right-5',
+                'hidden lg:flex items-center justify-center',
+                'w-10 h-10 rounded-full cursor-pointer',
+                'border border-white/10 bg-white/5',
+                'text-neutral-400 hover:text-white',
+                'disabled:opacity-30 disabled:cursor-not-allowed'
+              )}
             >
-              <ChevronRight size={20} />
+              <ChevronRight size={18} />
             </motion.button>
           </div>
 
           {/* Dot Indicators */}
           <div className="flex justify-center gap-2 pt-2" role="tablist" aria-label="Carousel navigation">
             {featuredContributions.map((_, i) => (
-              <button
+              <motion.button
                 key={i}
+                layout
                 role="tab"
                 aria-selected={activeIndex === i}
                 aria-label={`Go to contribution ${i + 1}`}
-                onClick={() => setActiveIndex(i)}
-                className="relative h-2 rounded-full cursor-pointer transition-colors"
-              >
-                <motion.div
-                  layout
-                  className={cn(
-                    'h-2 rounded-full',
-                    activeIndex === i ? 'bg-primary-400' : 'bg-neutral-600'
-                  )}
-                  style={activeIndex === i ? {
-                    width: 24,
-                    boxShadow: '0 0 8px rgba(56, 189, 248, 0.4)',
-                  } : {
-                    width: 8,
-                  }}
-                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                />
-              </button>
+                onClick={() => goToIndex(i)}
+                className={cn(
+                  'h-2 rounded-full cursor-pointer transition-colors duration-300',
+                  activeIndex === i
+                    ? 'bg-primary-400 w-6'
+                    : 'bg-neutral-600 w-2 hover:bg-neutral-500'
+                )}
+                style={activeIndex === i ? {
+                  boxShadow: '0 0 8px rgba(56, 189, 248, 0.4)',
+                } : undefined}
+                transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+              />
             ))}
           </div>
         </div>
@@ -411,8 +478,8 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
       } : undefined}
       whileHover={isCenter ? {
         y: -4,
-        boxShadow: '0 0 30px rgba(56, 189, 248, 0.2), 0 20px 40px rgba(0, 0, 0, 0.3)',
-        transition: { duration: 0.3, ease: 'easeOut' },
+        boxShadow: '0 0 30px rgba(56, 189, 248, 0.18), 0 16px 32px rgba(0, 0, 0, 0.25)',
+        transition: { duration: 0.25, ease: 'easeOut' },
       } : undefined}
     >
       {/* Header */}
@@ -491,5 +558,69 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function CountUp({
+  end,
+  duration = 1.6,
+  prefix = '',
+  suffix = '',
+  separator = '',
+}: {
+  end: number;
+  duration?: number;
+  prefix?: string;
+  suffix?: string;
+  separator?: string;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [count, setCount] = useState(0);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setCount(end);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          const start = performance.now();
+          const durationMs = duration * 1000;
+
+          const tick = (now: number) => {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / durationMs, 1);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * end));
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [end, duration]);
+
+  const formatted = separator
+    ? count.toLocaleString('en-US')
+    : String(count);
+
+  return (
+    <span ref={ref}>
+      {prefix}{formatted}{suffix}
+    </span>
   );
 }
