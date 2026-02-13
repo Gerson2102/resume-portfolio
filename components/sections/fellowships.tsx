@@ -122,7 +122,7 @@ export function FellowshipsSection() {
               scrollTrigger: {
                 trigger: node,
                 start: 'top 75%',
-                toggleActions: 'play none none none',
+                toggleActions: 'play none none reverse',
               },
             }
           );
@@ -140,7 +140,7 @@ export function FellowshipsSection() {
               scrollTrigger: {
                 trigger: ripple,
                 start: 'top 75%',
-                toggleActions: 'play none none none',
+                toggleActions: 'play none none reverse',
               },
             }
           );
