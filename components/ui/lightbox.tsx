@@ -115,37 +115,31 @@ export function Lightbox({
 
       {/* Image container */}
       <div
-        className="flex items-center justify-center w-full h-full p-4"
+        className="flex flex-col items-center justify-center w-full h-full px-12 py-14 sm:px-16 sm:py-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="max-w-6xl max-h-full">
-          <OptimizedImage
-            src={currentImage.src}
-            alt={currentImage.alt}
-            width={1200}
-            height={800}
-            className="max-w-full max-h-full object-contain rounded-lg"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
-          />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={currentImage.src}
+          alt={currentImage.alt}
+          className="max-w-full max-h-[calc(100vh-9rem)] object-contain rounded-lg"
+        />
 
-          {/* Caption */}
-          {currentImage.caption && (
-            <div className="mt-4 text-center">
+        {/* Caption + counter */}
+        {(currentImage.caption || hasMultipleImages) && (
+          <div className="mt-3 text-center shrink-0">
+            {currentImage.caption && (
               <p className="text-white text-sm sm:text-base max-w-2xl mx-auto">
                 {currentImage.caption}
               </p>
-            </div>
-          )}
-
-          {/* Image counter */}
-          {hasMultipleImages && (
-            <div className="mt-2 text-center">
-              <span className="text-white/70 text-sm">
+            )}
+            {hasMultipleImages && (
+              <span className="text-white/70 text-sm mt-1 block">
                 {currentIndex + 1} of {images.length}
               </span>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
     </div>,
     document.body

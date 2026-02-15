@@ -42,5 +42,8 @@ next-env.d.ts
 *.swp
 *.swo
 
+# documentation
+/docs
+
 # OS generated files
 Thumbs.db
