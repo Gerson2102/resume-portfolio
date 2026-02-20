@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { SOCIAL_LINKS, RESUME_URL } from '@/lib/utils'
 
 const navigation = [
+  { name: 'Devconnect', href: '#devconnect' },
   { name: 'Projects', href: '#projects' },
   { name: 'Open Source', href: '#oss' },
   { name: 'Experience', href: '#experience' },

@@ -1,0 +1,31 @@
+{
+  "connections": [
+    {
+      "name": "Ornella",
+      "handle": "@OrnellaWeb3",
+      "role": "Web3 Community Builder & Advocate",
+      "accent": "#a855f7",
+      "photo": "/images/devconnect/ornella-and-me.webp",
+      "xUrl": "https://x.com/OrnellaWeb3",
+      "alt": "Gerson with Ornella at Devconnect 2025, arched industrial hall with teal and purple event lighting"
+    },
+    {
+      "name": "Perrie",
+      "handle": "@youfoundperrie",
+      "role": "Ethereum Ecosystem",
+      "accent": "#0ea5e9",
+      "photo": "/images/devconnect/perrie-and-me.webp",
+      "xUrl": "https://x.com/youfoundperrie",
+      "alt": "Gerson with Perrie at Devconnect 2025 conference space"
+    },
+    {
+      "name": "Ameen Soleimani",
+      "handle": "@ameensol",
+      "role": "Cypherpunk · Privacy Pools & 0xbow",
+      "accent": "#f97316",
+      "photo": "/images/devconnect/me-and-ameen.webp",
+      "xUrl": "https://x.com/ameensol",
+      "alt": "Gerson with Ameen Soleimani at Devconnect 2025, in front of 0xbow Privacy Pools banner"
+    }
+  ]
+}
