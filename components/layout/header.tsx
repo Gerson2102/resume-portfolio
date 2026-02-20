@@ -13,6 +13,7 @@ const navigation = [
   { name: 'Experience', href: '#experience' },
   { name: 'Fellowships', href: '#fellowships' },
   { name: 'Speaking', href: '#speaking' },
+  { name: 'Contact', href: '#contact' },
 ]
 
 export function Header() {
@@ -62,15 +63,15 @@ export function Header() {
       <nav className="container-max section-padding py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link
-            href="/"
-            className="text-2xl font-bold text-neutral-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus-ring"
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="text-2xl font-bold text-neutral-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus-ring cursor-pointer"
           >
             Gerson
-          </Link>
+          </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -89,13 +90,14 @@ export function Header() {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             <Link
               href={SOCIAL_LINKS.github}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-ring"
               aria-label="GitHub"
+              title="GitHub"
             >
               <Github size={20} />
             </Link>
@@ -115,7 +117,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-ring"
+            className="lg:hidden p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-ring"
             aria-label="Toggle mobile menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -124,7 +126,7 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 py-4 border-t border-neutral-200 dark:border-neutral-700 animate-fade-in">
+          <div className="lg:hidden mt-4 py-4 border-t border-neutral-200 dark:border-neutral-700 animate-fade-in">
             <div className="flex flex-col space-y-4">
               {navigation.map((item) => (
                 <Link

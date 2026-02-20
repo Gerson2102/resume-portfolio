@@ -241,9 +241,10 @@ export function OpenSourceSection() {
             aria-roledescription="carousel"
             tabIndex={0}
             onKeyDown={handleKeyDown}
+            aria-live="polite"
           >
             {/* Desktop Carousel (3 cards) — stable slots, content crossfades */}
-            <div className="hidden lg:flex items-center justify-center gap-8 overflow-hidden py-4">
+            <div className="hidden lg:flex items-center justify-center gap-6 overflow-hidden py-4">
               {[0, 1, 2].map((slotIndex) => {
                 const isCenter = slotIndex === 1;
                 const contribution = visibleCards[slotIndex];
@@ -254,7 +255,7 @@ export function OpenSourceSection() {
                       opacity: isCenter ? 1 : 0.5,
                       scale: isCenter ? 1 : 0.92,
                       y: isCenter ? 0 : 12,
-                      filter: isCenter ? 'blur(0px)' : 'blur(1.5px)',
+                      filter: isCenter ? 'blur(0px)' : 'blur(0.75px)',
                       borderColor: isCenter
                         ? 'rgba(56, 189, 248, 0.35)'
                         : 'rgba(255, 255, 255, 0.06)',
@@ -354,9 +355,9 @@ export function OpenSourceSection() {
               whileTap={{ scale: 0.92 }}
               transition={{ duration: 0.15 }}
               className={cn(
-                'absolute top-1/2 -translate-y-1/2 left-2 xl:-left-5',
+                'absolute top-1/2 -translate-y-1/2 left-2 xl:-left-5 z-10',
                 'hidden lg:flex items-center justify-center',
-                'w-10 h-10 rounded-full cursor-pointer',
+                'w-11 h-11 rounded-full cursor-pointer',
                 'border border-white/10 bg-white/5',
                 'text-neutral-400 hover:text-white',
                 'disabled:opacity-30 disabled:cursor-not-allowed'
@@ -373,9 +374,9 @@ export function OpenSourceSection() {
               whileTap={{ scale: 0.92 }}
               transition={{ duration: 0.15 }}
               className={cn(
-                'absolute top-1/2 -translate-y-1/2 right-2 xl:-right-5',
+                'absolute top-1/2 -translate-y-1/2 right-2 xl:-right-5 z-10',
                 'hidden lg:flex items-center justify-center',
-                'w-10 h-10 rounded-full cursor-pointer',
+                'w-11 h-11 rounded-full cursor-pointer',
                 'border border-white/10 bg-white/5',
                 'text-neutral-400 hover:text-white',
                 'disabled:opacity-30 disabled:cursor-not-allowed'
@@ -386,26 +387,30 @@ export function OpenSourceSection() {
           </div>
 
           {/* Dot Indicators */}
-          <div className="flex justify-center gap-2 pt-2" role="tablist" aria-label="Carousel navigation">
+          <div className="flex justify-center gap-1 pt-2" aria-label="Carousel navigation">
             {featuredContributions.map((_, i) => (
               <motion.button
                 key={i}
-                layout
-                role="tab"
-                aria-selected={activeIndex === i}
                 aria-label={`Go to contribution ${i + 1}`}
+                aria-current={activeIndex === i ? 'true' : undefined}
                 onClick={() => goToIndex(i)}
-                className={cn(
-                  'h-2 rounded-full cursor-pointer transition-colors duration-300',
-                  activeIndex === i
-                    ? 'bg-primary-400 w-6'
-                    : 'bg-neutral-600 w-2 hover:bg-neutral-500'
-                )}
-                style={activeIndex === i ? {
-                  boxShadow: '0 0 8px rgba(56, 189, 248, 0.4)',
-                } : undefined}
-                transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              />
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
+                whileTap={{ scale: 0.9 }}
+              >
+                <motion.span
+                  layout
+                  className={cn(
+                    'h-2 rounded-full transition-colors duration-300',
+                    activeIndex === i
+                      ? 'bg-primary-400 w-6'
+                      : 'bg-neutral-600 w-2 hover:bg-neutral-500'
+                  )}
+                  style={activeIndex === i ? {
+                    boxShadow: '0 0 8px rgba(56, 189, 248, 0.4)',
+                  } : undefined}
+                  transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+                />
+              </motion.button>
             ))}
           </div>
         </div>
@@ -487,10 +492,10 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
         <div className="flex items-center space-x-2 min-w-0 flex-1">
           <span className="text-2xl flex-shrink-0">{getTypeIcon(contribution.type)}</span>
           <div className="min-w-0">
-            <h4 className="font-semibold text-neutral-900 dark:text-white truncate">
+            <h4 className="font-semibold text-neutral-900 dark:text-white truncate" title={contribution.title}>
               {contribution.title}
             </h4>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate" title={contribution.repository}>
               {contribution.repository}
             </p>
           </div>

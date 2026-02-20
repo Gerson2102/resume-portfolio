@@ -53,9 +53,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-2">
               {[
-                { name: 'Featured Projects', href: '#projects' },
-                { name: 'Open Source', href: '#oss' },
-                { name: 'Speaking', href: '#speaking' },
+                { name: 'Featured Projects', href: '/#projects' },
+                { name: 'Open Source', href: '/#oss' },
+                { name: 'Experience', href: '/#experience' },
+                { name: 'Fellowships', href: '/#fellowships' },
+                { name: 'Speaking', href: '/#speaking' },
+                { name: 'Contact', href: '/#contact' },
               ].map((link) => (
                 <li key={link.name}>
                   <Link
@@ -105,7 +108,7 @@ export function Footer() {
             </div>
 
             {/* Copyright & Links */}
-            <div className="flex items-center space-x-6 text-sm text-neutral-600 dark:text-neutral-400">
+            <div className="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-2 sm:space-y-0 text-sm text-neutral-600 dark:text-neutral-400">
               <span>© {new Date().getFullYear()} Gerson. All rights reserved.</span>
               <Link
                 href={RESUME_URL}

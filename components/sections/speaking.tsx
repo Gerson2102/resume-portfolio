@@ -213,7 +213,7 @@ export function SpeakingSection() {
         )}
 
         {/* Speaking Availability CTA */}
-        <div className="cta-card text-center mt-16 p-8 glass-card rounded-xl">
+        <div className="cta-card text-center mt-12 p-8 glass-card rounded-xl">
           <h3 ref={ctaTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">
             Available for Speaking
           </h3>

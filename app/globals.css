@@ -138,7 +138,7 @@
 }
 
 @utility glass-card {
-  @apply backdrop-blur-xs bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/50 dark:border-neutral-700/50;
+  @apply backdrop-blur-xs bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/50 dark:border-neutral-700/60;
 }
 
 @utility photo-card {
@@ -242,7 +242,7 @@
 
 @utility focus-ring {
   /* Focus styles for accessibility */
-  @apply focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900;
+  @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900;
 }
 
 @utility image-loading {
@@ -257,7 +257,24 @@
 
   body {
     font-feature-settings: "rlig" 1, "calt" 1;
-    overflow-x: hidden;
+    overflow-x: clip;
+    line-height: 1.6;
+  }
+
+  h1 {
+    line-height: 1.2;
+  }
+
+  h2 {
+    line-height: 1.25;
+  }
+
+  h3 {
+    line-height: 1.3;
+  }
+
+  h4 {
+    line-height: 1.35;
   }
 
   /* Respect user motion preferences */

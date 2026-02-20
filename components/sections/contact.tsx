@@ -200,13 +200,13 @@ export function ContactSection() {
 
           {/* Contact Details - Horizontal Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {/* Location */}
-            <div className="contact-detail text-center space-y-3">
-              <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto">
-                <MapPin size={24} className="text-neutral-600 dark:text-neutral-400" />
+            {/* Location (non-interactive) */}
+            <div className="contact-detail text-center space-y-3 opacity-80">
+              <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-700/50 rounded-full flex items-center justify-center mx-auto">
+                <MapPin size={24} className="text-neutral-500 dark:text-neutral-500" />
               </div>
               <div>
-                <h4 className="font-semibold text-neutral-900 dark:text-white mb-1">Based in {CONTACT_INFO.location}</h4>
+                <p className="font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Based in {CONTACT_INFO.location}</p>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">Available for remote work worldwide</p>
               </div>
             </div>
@@ -266,7 +266,7 @@ export function ContactSection() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block p-3 rounded-xl bg-white dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-md transition-all duration-200 focus-ring"
+                      className="block p-3 rounded-xl bg-white dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-md transition-all duration-200 focus-ring"
                       aria-label={`Follow on ${platform}`}
                     >
                       <Icon size={24} />
@@ -301,7 +301,7 @@ function OpportunityCard({
 }: OpportunityCardProps) {
   return (
     <m.div
-      className={`opportunity-card p-4 ${bgColor} rounded-lg border-l-4 ${borderColor}`}
+      className={`opportunity-card p-4 ${bgColor} rounded-lg border-l-[5px] ${borderColor}`}
       whileHover={{
         scale: 1.03,
         x: 5,

@@ -157,7 +157,7 @@ function VideoCarousel({ clips, poster, className }: VideoCarouselProps) {
           <button
             type="button"
             className={cn(
-              'absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full',
+              'absolute left-2 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full',
               'bg-black/30 hover:bg-black/50 transition-colors focus-ring',
               'transition-opacity duration-300',
               controlsVisible ? 'opacity-100' : 'opacity-0 pointer-events-none',
@@ -170,7 +170,7 @@ function VideoCarousel({ clips, poster, className }: VideoCarouselProps) {
           <button
             type="button"
             className={cn(
-              'absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full',
+              'absolute right-2 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full',
               'bg-black/30 hover:bg-black/50 transition-colors focus-ring',
               'transition-opacity duration-300',
               controlsVisible ? 'opacity-100' : 'opacity-0 pointer-events-none',
@@ -200,12 +200,16 @@ function VideoCarousel({ clips, poster, className }: VideoCarouselProps) {
                 key={i}
                 type="button"
                 className={cn(
-                  'h-1.5 rounded-full transition-all duration-300 focus-ring',
-                  i === activeClip ? 'bg-primary-400 w-6' : 'bg-white/30 w-1.5 hover:bg-white/50',
+                  'min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-all duration-300 focus-ring',
                 )}
                 onClick={() => switchClip(i)}
                 aria-label={clip.label}
-              />
+              >
+                <span className={cn(
+                  'h-1.5 rounded-full transition-all duration-300',
+                  i === activeClip ? 'bg-primary-400 w-6' : 'bg-white/30 w-1.5',
+                )} />
+              </button>
             ))}
           </div>
         )}
@@ -238,7 +242,7 @@ function VideoCarousel({ clips, poster, className }: VideoCarouselProps) {
           {/* Mute toggle */}
           <button
             type="button"
-            className="p-2 rounded-full hover:bg-white/10 transition-colors focus-ring"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-white/10 transition-colors focus-ring"
             onClick={toggleMute}
             aria-label={isMuted ? 'Unmute video' : 'Mute video'}
           >
@@ -280,7 +284,7 @@ function ConnectionCard({ connection }: ConnectionCardProps) {
     <div
       className={cn(
         'glass-card rounded-2xl overflow-hidden group',
-        'min-w-[280px] lg:min-w-0 snap-center',
+        'min-w-[260px] max-w-[85vw] lg:min-w-0 lg:max-w-none snap-center',
         'hover-lift',
       )}
     >
@@ -469,7 +473,7 @@ export function DevconnectSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="devconnect" className="section-padding relative overflow-hidden">
+    <section ref={sectionRef} id="devconnect" className="section-padding relative overflow-hidden bg-neutral-800">
       <div className="container-max">
         {/* ================================================================
             Block 1: Section Header
@@ -607,7 +611,7 @@ export function DevconnectSection() {
         ================================================================ */}
         <div
           ref={credentialRef}
-          className="glass-card-premium rounded-2xl p-8 md:p-12 text-center max-w-2xl mx-auto relative overflow-hidden"
+          className="glass-card-premium rounded-2xl p-8 md:p-12 text-center max-w-2xl mx-auto relative overflow-hidden break-words"
           style={{
             background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.05), rgba(14, 165, 233, 0.02))',
           }}

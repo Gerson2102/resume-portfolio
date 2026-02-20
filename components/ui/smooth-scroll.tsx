@@ -26,12 +26,35 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       infinite: false,
     });
 
+    let rafId: number;
+    let isScrolling = false;
+    let idleTimeout: ReturnType<typeof setTimeout>;
+
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      if (isScrolling) {
+        rafId = requestAnimationFrame(raf);
+      }
     }
 
-    requestAnimationFrame(raf);
+    function startRaf() {
+      if (!isScrolling) {
+        isScrolling = true;
+        rafId = requestAnimationFrame(raf);
+      }
+      clearTimeout(idleTimeout);
+      idleTimeout = setTimeout(() => {
+        isScrolling = false;
+      }, 150);
+    }
+
+    // Start RAF on scroll-related events
+    window.addEventListener('wheel', startRaf, { passive: true });
+    window.addEventListener('touchmove', startRaf, { passive: true });
+    window.addEventListener('scroll', startRaf, { passive: true });
+
+    // Initial kick to ensure Lenis initializes properly
+    startRaf();
 
     // Expose lenis instance globally for GSAP ScrollTrigger integration
     if (typeof window !== 'undefined') {
@@ -39,6 +62,11 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     }
 
     return () => {
+      clearTimeout(idleTimeout);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('wheel', startRaf);
+      window.removeEventListener('touchmove', startRaf);
+      window.removeEventListener('scroll', startRaf);
       lenis.destroy();
       if (typeof window !== 'undefined') {
         delete (window as any).lenis;

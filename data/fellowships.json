@@ -19,11 +19,7 @@
       "Protocol Optimization"
     ],
     "logo": "/images/2025/fellowships/starknet-logo.webp",
-    "images": [
-      "/images/2025/fellowships/starknet-logo.webp",
-      "/images/2025/fellowships/onlydust-contribution-dashboard.png",
-      "/images/2025/fellowships/starknet-core-pr-merged.png"
-    ],
+    "images": [],
     "links": {
       "program": "https://docs.onlydust.com/contributors-hiya/onlydust-fellowship",
       "profile": "https://app.onlydust.com/u/Gerson2102"
@@ -49,10 +45,7 @@
       "AI Applications"
     ],
     "logo": "/images/2024/fellowships/invisible-garden-logo.webp",
-    "images": [
-      "/images/2024/fellowships/invisible-garden-cohort-2024.jpg",
-      "/images/2024/fellowships/invisible-garden-research-session.jpg"
-    ],
+    "images": [],
     "links": {
       "program": "https://invisible.garden/chiang-mai-recap"
     },
@@ -104,11 +97,7 @@
       "Protocol Evolution"
     ],
     "logo": "/images/2025/fellowships/ethereum-foundation-logo.webp",
-    "images": [
-      "/images/2025/fellowships/ethereum-foundation-logo.webp",
-      "/images/2025/fellowships/devconnect-argentina-2025.jpg",
-      "/images/2025/fellowships/ethereum-devconnect-scholarship-certificate.png"
-    ],
+    "images": [],
     "links": {
       "event": "https://devconnect.org/argentina-2025",
       "scholarship": "https://nxbn.ethereum.foundation/scholars"

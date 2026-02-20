@@ -202,7 +202,7 @@ export function FellowshipsSection() {
     <section
       ref={sectionRef}
       id="fellowships"
-      className="section-padding bg-white dark:bg-neutral-900"
+      className="section-padding bg-white dark:bg-neutral-900 overflow-hidden"
     >
       <div className="container-max">
         {/* Section Header */}
@@ -229,7 +229,7 @@ export function FellowshipsSection() {
           {/* Central vertical line — positioned dynamically from first to last node */}
           <div
             ref={lineWrapperRef}
-            className="absolute left-6 lg:left-1/2 lg:-translate-x-1/2 w-0.5"
+            className="absolute left-5 lg:left-1/2 lg:-translate-x-1/2 w-0.5"
           >
             <div
               ref={lineRef}
@@ -255,9 +255,9 @@ export function FellowshipsSection() {
                   {yearLabel && (
                     <div className="relative flex items-center mb-12 lg:mb-16">
                       {/* Mobile: offset from left line */}
-                      <div className="pl-14 lg:pl-0 lg:w-full lg:flex lg:items-center lg:justify-center">
+                      <div className="pl-12 lg:pl-0 lg:w-full lg:flex lg:items-center lg:justify-center">
                         <div className="hidden lg:block flex-1 h-px bg-neutral-700/30" />
-                        <span className="text-sm font-mono text-neutral-500 lg:px-4">
+                        <span className="text-sm font-mono font-semibold text-neutral-400 lg:px-4">
                           {yearLabel}
                         </span>
                         <div className="hidden lg:block flex-1 h-px bg-neutral-700/30" />
@@ -276,7 +276,7 @@ export function FellowshipsSection() {
                     {/* Node column — mobile: absolute left, desktop: center */}
                     <div
                       className={cn(
-                        'absolute left-6 lg:left-1/2 -translate-x-1/2 z-10',
+                        'absolute left-5 lg:left-1/2 -translate-x-1/2 z-10',
                         'flex items-center justify-center',
                       )}
                       style={{ top: '24px' }}
@@ -302,7 +302,7 @@ export function FellowshipsSection() {
                     <div
                       className={cn(
                         // Mobile: card on right of the left line
-                        'ml-14 w-[calc(100%-56px)]',
+                        'ml-12 w-[calc(100%-48px)]',
                         // Desktop: alternating layout
                         'lg:ml-0 lg:w-full lg:flex lg:items-start',
                         isLeft ? 'lg:flex-row-reverse' : 'lg:flex-row',

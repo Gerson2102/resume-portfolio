@@ -10,8 +10,7 @@
       "github": "https://github.com/Arkthemist/Arkthemist"
     },
     "coverImage": "/images/2025/projects/arkthemist.webp",
-    "gallery": [
-    ],
+    "gallery": [],
     "featured": true,
     "year": 2025
   },
@@ -25,8 +24,7 @@
     "links": {
     },
     "coverImage": "/images/2024/projects/image.webp",
-    "gallery": [
-    ],
+    "gallery": [],
     "featured": true,
     "year": 2024
   },
@@ -41,8 +39,7 @@
       "github": "https://github.com/NethermindEth/nine"
     },
     "coverImage": "/images/2025/projects/nine.webp",
-    "gallery": [
-    ],
+    "gallery": [],
     "featured": false,
     "year": 2025
   },
@@ -57,8 +54,7 @@
       "github": "https://github.com/AlpenLabs/ethereum-ssz-rs"
     },
     "coverImage": "/images/2025/projects/alpen.webp",
-    "gallery": [
-    ],
+    "gallery": [],
     "featured": false,
     "year": 2025
   }

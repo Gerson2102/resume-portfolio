@@ -109,7 +109,10 @@ export function ProjectsSection() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className={cn(
+              "grid grid-cols-1 gap-6",
+              otherProjects.length <= 2 ? "md:grid-cols-2 max-w-4xl mx-auto" : "md:grid-cols-2 xl:grid-cols-3"
+            )}>
               {otherProjects.map((project) => (
                 <ProjectCard
                   key={project.id}

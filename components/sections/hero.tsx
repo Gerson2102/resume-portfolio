@@ -323,7 +323,7 @@ export function HeroSection() {
           </div>
 
           {/* Metrics Row */}
-          <div className="metrics-wrapper grid grid-cols-2 md:grid-cols-4 gap-6 mb-8" style={{ opacity: 0 }}>
+          <div className="metrics-wrapper grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8" style={{ opacity: 0 }}>
             {metrics.map((metric, index) => (
               <motion.div
                 key={index}
@@ -379,15 +379,15 @@ export function HeroSection() {
       {/* Scroll Indicator */}
       <button
         onClick={() => {
-          const next = document.getElementById('fellowships');
+          const next = document.getElementById('devconnect');
           next?.scrollIntoView({ behavior: 'smooth' });
         }}
-        className="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer focus-ring rounded-full"
+        className="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer focus-ring rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center"
         style={{ opacity: 0 }}
         aria-label="Scroll to next section"
       >
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse" />
+        <div className="w-7 h-11 border-2 border-white/70 rounded-full flex justify-center shadow-[0_0_12px_rgba(255,255,255,0.15)]">
+          <div className="w-1.5 h-3 bg-white/70 rounded-full mt-2 animate-pulse" />
         </div>
       </button>
     </section>

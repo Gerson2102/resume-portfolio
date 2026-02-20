@@ -28,17 +28,28 @@ export function GlowCard({
     disabledRef.current = noHover || reducedMotion
   }, [])
 
+  const rafPending = useRef(false)
+
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabledRef.current) return
-    const glow = glowRef.current
+    if (disabledRef.current || rafPending.current) return
     const card = cardRef.current
-    if (!glow || !card) return
+    if (!card) return
 
-    const rect = card.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
+    rafPending.current = true
+    const x = e.clientX
+    const y = e.clientY
 
-    glow.style.background = `radial-gradient(${glowSize}px circle at ${x}px ${y}px, ${glowColor}, transparent 60%)`
+    requestAnimationFrame(() => {
+      const glow = glowRef.current
+      if (!glow || !card) { rafPending.current = false; return }
+
+      const rect = card.getBoundingClientRect()
+      const localX = x - rect.left
+      const localY = y - rect.top
+
+      glow.style.background = `radial-gradient(${glowSize}px circle at ${localX}px ${localY}px, ${glowColor}, transparent 60%)`
+      rafPending.current = false
+    })
   }, [glowColor, glowSize])
 
   const handleMouseEnter = useCallback(() => {

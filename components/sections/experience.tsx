@@ -318,7 +318,7 @@ function ContentPanel({
       };
 
   return (
-    <div className="min-h-[320px]">
+    <div className="min-h-[320px]" aria-live="polite">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
