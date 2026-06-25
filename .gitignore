@@ -6,6 +6,10 @@
 .pnp.js
 .yarn/install-state.gz
 
+# pnpm 10/11 local build-script approval (allowBuilds) — must NOT be committed:
+# CI runs pnpm 9, which rejects a pnpm-workspace.yaml that has no `packages` field.
+pnpm-workspace.yaml
+
 # testing
 /coverage
 
