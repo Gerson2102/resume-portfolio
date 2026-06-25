@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ui/theme-provider'
@@ -8,8 +8,16 @@ import { SmoothScroll } from '@/components/ui/smooth-scroll'
 import { MotionProvider } from '@/components/ui/motion-provider'
 import { ScrollProgress } from '@/components/ui/scroll-progress'
 
-const inter = Inter({ subsets: ['latin'] })
-const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono' })
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://gersonloaiza.com'),
@@ -29,6 +37,10 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Gerson', url: 'https://github.com/Gerson2102' }],
   creator: 'Gerson',
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+  },
+  manifest: '/manifest.json',
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -69,38 +81,41 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0ea5e9',
+  colorScheme: 'dark',
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Gerson',
+    jobTitle: 'Web3 Developer',
+    url: 'https://gersonloaiza.com',
+    sameAs: [
+      'https://github.com/Gerson2102',
+      'https://x.com/Glv_exe02',
+      'https://www.linkedin.com/in/gerson-lv/',
+    ],
+  },
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="manifest" href="/manifest.json" />
+    <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <body className="font-sans">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'ProfilePage',
-              mainEntity: {
-                '@type': 'Person',
-                name: 'Gerson',
-                jobTitle: 'Web3 Developer',
-                url: 'https://gersonloaiza.com',
-                sameAs: [
-                  'https://github.com/Gerson2102',
-                  'https://x.com/Glv_exe02',
-                  'https://www.linkedin.com/in/gerson-lv/',
-                ],
-              },
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className={`${inter.className} ${jetbrainsMono.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
