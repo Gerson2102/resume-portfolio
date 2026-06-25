@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { SmoothScroll } from '@/components/ui/smooth-scroll'
+import { MotionProvider } from '@/components/ui/motion-provider'
+import { ScrollProgress } from '@/components/ui/scroll-progress'
 
 const inter = Inter({ subsets: ['latin'] })
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono' })
@@ -107,19 +109,22 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SmoothScroll>
-            <a
-              href="#main"
-              className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-medium"
-            >
-              Skip to content
-            </a>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main id="main" className="flex-1 overflow-x-clip">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            <MotionProvider>
+              <a
+                href="#main"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-medium"
+              >
+                Skip to content
+              </a>
+              <ScrollProgress />
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main id="main" className="flex-1 overflow-x-clip">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </MotionProvider>
           </SmoothScroll>
         </ThemeProvider>
       </body>

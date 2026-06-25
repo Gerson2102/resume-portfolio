@@ -1,28 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { MessageCircle, Github, Linkedin } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
+import { m } from 'framer-motion';
+import { gsap } from '@/lib/gsap';
 import { OptimizedImage } from '@/components/ui/image';
+import { socialIcons } from '@/components/ui/icons';
+import { getPrefersReducedMotion } from '@/lib/hooks/use-prefers-reduced-motion';
 import { SOCIAL_LINKS } from '@/lib/utils';
 import statsData from '@/data/stats.json';
 
-function XIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-
-const socialIcons = {
-  github: Github,
-  twitter: XIcon,
-  linkedin: Linkedin,
-  telegram: MessageCircle,
-};
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 function Cursor({ isTyping, fading }: { isTyping: boolean; fading: boolean }) {
   return (
@@ -51,14 +39,17 @@ const fullDescription = "Trusted by leading protocols to ship code that matters.
 export function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const [displayedName, setDisplayedName] = useState('');
-  const [displayedSubtitle, setDisplayedSubtitle] = useState('');
-  const [displayedDescription, setDisplayedDescription] = useState('');
-  const [currentPhase, setCurrentPhase] = useState<TypingPhase>('name');
-  const [isTyping, setIsTyping] = useState(true);
-  const [cursorFading, setCursorFading] = useState(false);
+  // Seed the full text so the static HTML ships a populated <h1>, subtitle and
+  // description (good for SEO / no-JS / screen readers). The typing animation
+  // resets and replays on the client in a layout effect (before paint, so the
+  // seeded text never visibly flashes).
+  const [displayedName, setDisplayedName] = useState(fullName);
+  const [displayedSubtitle, setDisplayedSubtitle] = useState(fullSubtitle);
+  const [displayedDescription, setDisplayedDescription] = useState(fullDescription);
+  const [currentPhase, setCurrentPhase] = useState<TypingPhase>('done');
+  const [isTyping, setIsTyping] = useState(false);
+  const [cursorFading, setCursorFading] = useState(true);
   const [typingComplete, setTypingComplete] = useState(false);
 
   const metrics = [
@@ -69,21 +60,22 @@ export function HeroSection() {
   ];
 
   // Typing engine
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
-      setDisplayedName(fullName);
-      setDisplayedSubtitle(fullSubtitle);
-      setDisplayedDescription(fullDescription);
-      setCurrentPhase('done');
-      setCursorFading(true);
+  useIsomorphicLayoutEffect(() => {
+    if (getPrefersReducedMotion()) {
+      // Text is already seeded in full; just reveal the metrics/social row.
       setTypingComplete(true);
       return;
     }
 
+    // Reset the seeded text and play the character-by-character typing.
+    setDisplayedName('');
+    setDisplayedSubtitle('');
+    setDisplayedDescription('');
+    setCurrentPhase('name');
+    setIsTyping(true);
+    setCursorFading(false);
+
     const timeouts: ReturnType<typeof setTimeout>[] = [];
-    timeoutsRef.current = timeouts;
 
     let offset = 0;
 
@@ -168,9 +160,7 @@ export function HeroSection() {
 
   // Image animation (runs on mount, concurrent with typing)
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
+    if (getPrefersReducedMotion()) {
       if (imageRef.current) {
         gsap.set(imageRef.current, { opacity: 1, scale: 1 });
       }
@@ -193,9 +183,7 @@ export function HeroSection() {
   useEffect(() => {
     if (!typingComplete) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
+    if (getPrefersReducedMotion()) {
       gsap.set(['.metrics-wrapper', '.social-wrapper', '.scroll-indicator'], {
         opacity: 1,
         y: 0,
@@ -325,7 +313,7 @@ export function HeroSection() {
           {/* Metrics Row */}
           <div className="metrics-wrapper grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8" style={{ opacity: 0 }}>
             {metrics.map((metric, index) => (
-              <motion.div
+              <m.div
                 key={index}
                 className="metric-card text-center backdrop-blur-xs bg-white/5 rounded-lg p-3 border border-white/10 hover-lift"
                 whileHover={{
@@ -340,7 +328,7 @@ export function HeroSection() {
                 <div className="text-sm md:text-base text-white/85 drop-shadow-xs [text-shadow:1px_1px_2px_rgb(0_0_0/50%)]">
                   {metric.label}
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
 
@@ -350,7 +338,7 @@ export function HeroSection() {
             {Object.entries(SOCIAL_LINKS).map(([platform, url]) => {
               const Icon = socialIcons[platform as keyof typeof socialIcons];
               return (
-                <motion.div
+                <m.div
                   key={platform}
                   className="social-link"
                   whileHover={{
@@ -369,7 +357,7 @@ export function HeroSection() {
                   >
                     <Icon size={20} />
                   </Link>
-                </motion.div>
+                </m.div>
               );
             })}
           </div>

@@ -46,39 +46,6 @@
   --aspect-hero: 16/9;
   --aspect-portrait: 3/4;
   --aspect-square: 1/1;
-
-  --animate-fade-in: fadeIn 0.5s ease-in-out;
-  --animate-slide-up: slideUp 0.5s ease-out;
-  --animate-scale-in: scaleIn 0.3s ease-out;
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  @keyframes slideUp {
-    0% {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  @keyframes scaleIn {
-    0% {
-      transform: scale(0.9);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
 }
 
 /*
@@ -99,46 +66,24 @@
   }
 }
 
-@utility text-balance {
-  text-wrap: balance;
-}
-
 @utility animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-@utility animate-slide-up {
-  animation: slideUp 0.5s ease-out;
+@utility animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
-@utility animate-scale-in {
-  animation: scaleIn 0.3s ease-out;
-}
-
-@utility image-hover-scale {
-  @apply transition-transform duration-300 ease-out hover:scale-105;
-}
-
-@utility gradient-overlay {
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-
-  .dark & {
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      transparent 40%,
-      rgba(0, 0, 0, 0.8) 100%
-    );
-  }
+@utility animate-blink-cursor {
+  animation: blink-cursor 530ms step-end infinite;
 }
 
 @utility glass-card {
-  @apply backdrop-blur-xs bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/50 dark:border-neutral-700/60;
+  @apply backdrop-blur-xs bg-neutral-900/80 border border-neutral-700/60;
+}
+
+@utility glass-card-premium {
+  @apply backdrop-blur-lg bg-linear-to-br from-neutral-900/80 to-neutral-800/60 border border-neutral-700/30 shadow-2xl;
 }
 
 @utility photo-card {
@@ -149,63 +94,8 @@
   }
 }
 
-@utility animate-gradient {
-  /* Premium animation utilities */
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-
-@utility animate-shimmer {
-  background-size: 200% 100%;
-  animation: shimmer 2s ease-in-out infinite;
-}
-
-@utility animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@utility animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@utility glass-effect {
-  /* Glass morphism utilities */
-  @apply backdrop-blur-xl bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10;
-}
-
-@utility glass-card-premium {
-  @apply backdrop-blur-lg bg-linear-to-br from-white/80 to-white/60 dark:from-neutral-900/80 dark:to-neutral-800/60 border border-white/20 dark:border-neutral-700/30 shadow-2xl;
-}
-
-@utility gradient-text {
-  /* Gradient text */
-  @apply bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
-}
-
-@utility gradient-text-blue {
-  @apply bg-linear-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent;
-}
-
 @utility hover-lift {
-  /* Hover effects */
   @apply transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl;
-}
-
-@utility hover-glow {
-  @apply transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)];
-}
-
-@utility hover-tilt {
-  @apply transition-transform duration-300 hover:scale-105;
-}
-
-@utility cursor-dot {
-  /* Custom cursor styles */
-  @apply fixed w-2 h-2 bg-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
-}
-
-@utility cursor-ring {
-  @apply fixed w-8 h-8 border-2 border-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference;
 }
 
 @utility section-padding {
@@ -221,7 +111,7 @@
 }
 
 @utility btn-secondary {
-  @apply bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-medium px-6 py-3 rounded-lg transition-colors duration-200;
+  @apply bg-neutral-800 hover:bg-neutral-700 text-neutral-100 font-medium px-6 py-3 rounded-lg transition-colors duration-200;
 }
 
 @utility badge {
@@ -229,25 +119,20 @@
 }
 
 @utility badge-primary {
-  @apply badge bg-primary-100 text-primary-800 dark:bg-primary-900/50 dark:text-primary-200;
+  @apply badge bg-primary-900/50 text-primary-200;
 }
 
 @utility badge-accent {
-  @apply badge bg-accent-100 text-accent-800 dark:bg-accent-900/50 dark:text-accent-200;
+  @apply badge bg-accent-900/50 text-accent-200;
 }
 
 @utility badge-neutral {
-  @apply badge bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200;
+  @apply badge bg-neutral-800 text-neutral-200;
 }
 
 @utility focus-ring {
   /* Focus styles for accessibility */
-  @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900;
-}
-
-@utility image-loading {
-  /* Image loading states */
-  @apply animate-pulse bg-neutral-200 dark:bg-neutral-800;
+  @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900;
 }
 
 @layer base {
@@ -290,19 +175,13 @@
   }
 }
 
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes pulse-glow {
@@ -310,80 +189,7 @@
   50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
 }
 
-@keyframes node-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
-}
-
 @keyframes blink-cursor {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
-}
-
-@utility animate-blink-cursor {
-  animation: blink-cursor 530ms step-end infinite;
-}
-
-/* Print styles for PDF export */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  .print-break-inside-avoid {
-    break-inside: avoid;
-  }
-
-  .print-break-after {
-    break-after: page;
-  }
-
-  body {
-    background: white !important;
-    color: black !important;
-    font-family: 'Times New Roman', serif;
-    line-height: 1.4;
-    font-size: 12pt;
-  }
-
-  h1 {
-    font-size: 24pt;
-    font-weight: bold;
-    margin-bottom: 12pt;
-    text-align: center;
-  }
-
-  h2 {
-    font-size: 16pt;
-    font-weight: bold;
-    margin-top: 18pt;
-    margin-bottom: 8pt;
-    border-bottom: 1pt solid #333;
-    padding-bottom: 4pt;
-  }
-
-  h3 {
-    font-size: 14pt;
-    font-weight: bold;
-    margin-top: 12pt;
-    margin-bottom: 6pt;
-  }
-
-  .text-primary-600 {
-    color: #0066cc !important;
-  }
-
-  .dark\:bg-neutral-900,
-  .dark\:bg-neutral-800 {
-    background: white !important;
-  }
-
-  .dark\:text-white {
-    color: black !important;
-  }
-
-  .dark\:text-neutral-300,
-  .dark\:text-neutral-400 {
-    color: #333 !important;
-  }
 }

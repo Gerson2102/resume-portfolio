@@ -15,13 +15,4 @@ const nextConfig = {
   // assetPrefix: '/repository-name/',
 };
 
-// MDX configuration
-const withMDX = require("@next/mdx")({
-  extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
-
-module.exports = withMDX(nextConfig);
+module.exports = nextConfig;

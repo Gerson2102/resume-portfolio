@@ -3,17 +3,13 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Github, ExternalLink, DollarSign, GitPullRequest, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
+import { m, AnimatePresence } from 'framer-motion';
+import { gsap } from '@/lib/gsap';
 import { OptimizedImage } from '@/components/ui/image';
+import { RevealHeading } from '@/components/ui/reveal-heading';
+import { getPrefersReducedMotion } from '@/lib/hooks/use-prefers-reduced-motion';
 import { cn, formatDate } from '@/lib/utils';
 import ossData from '@/data/oss.json';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -32,7 +28,6 @@ const slideVariants = {
 
 export function OpenSourceSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const carouselWrapperRef = useRef<HTMLDivElement>(null);
   const featuredContributions = ossData.filter(contrib => contrib.featured);
   const totalCards = featuredContributions.length;
@@ -108,29 +103,9 @@ export function OpenSourceSection() {
 
   // GSAP entrance animation
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    if (getPrefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.fromTo(splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
       if (carouselWrapperRef.current) {
         gsap.fromTo(carouselWrapperRef.current,
           { opacity: 0, y: 50 },
@@ -152,19 +127,21 @@ export function OpenSourceSection() {
     return () => ctx.revert();
   }, []);
 
+  const activeContribution = featuredContributions[activeIndex];
+
   return (
-    <section ref={sectionRef} id="oss" className="section-padding bg-neutral-50 dark:bg-neutral-800">
+    <section ref={sectionRef} id="oss" className="section-padding bg-neutral-800">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 rounded-full text-sm font-medium">
+          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-primary-900/50 text-primary-200 rounded-full text-sm font-medium">
             <Github size={16} />
             <span>Open Source Impact</span>
           </div>
-          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <RevealHeading as="h2" className="text-3xl md:text-4xl font-bold text-white mb-4">
             Contributing to the Starknet Ecosystem
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto mb-8">
+          </RevealHeading>
+          <p className="text-lg text-neutral-300 max-w-3xl mx-auto mb-8">
             Active contributor to the Starknet ecosystem through OnlyDust platform.
             Focus on core protocol improvements, developer tooling, and documentation.
           </p>
@@ -172,44 +149,44 @@ export function OpenSourceSection() {
           {/* Impact Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+              <div className="text-3xl font-bold text-primary-400 mb-1">
                 <CountUp end={300} suffix="+" duration={1.6} />
               </div>
-              <div className="text-neutral-600 dark:text-neutral-400">
+              <div className="text-neutral-400">
                 Contributions
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+              <div className="text-3xl font-bold text-primary-400 mb-1">
                 <CountUp end={10000} prefix="$" suffix="+" separator="," duration={1.8} />
               </div>
-              <div className="text-neutral-600 dark:text-neutral-400">
+              <div className="text-neutral-400">
                 Earned
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+              <div className="text-3xl font-bold text-primary-400 mb-1">
                 <CountUp end={100} suffix="%" duration={1.4} />
               </div>
-              <div className="text-neutral-600 dark:text-neutral-400">
+              <div className="text-neutral-400">
                 Merge Rate
               </div>
             </div>
           </div>
         </div>
 
-        {/* GitHub Contribution Visualization Placeholder */}
+        {/* GitHub Contribution Visualization */}
         <div className="mb-16">
           <div className="glass-card rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">
+              <h3 className="text-xl font-semibold text-white">
                 OnlyDust Contribution Activity
               </h3>
               <Link
                 href="https://app.onlydust.com/u/Gerson2102"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm focus-ring py-2"
+                className="inline-flex items-center space-x-1 text-primary-400 hover:text-primary-300 transition-colors text-sm focus-ring py-2"
               >
                 <span>View Profile</span>
                 <ExternalLink size={14} />
@@ -229,7 +206,7 @@ export function OpenSourceSection() {
 
         {/* Featured Contributions */}
         <div className="space-y-8">
-          <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white text-center">
+          <h3 className="text-2xl font-semibold text-white text-center">
             Key Contributions
           </h3>
 
@@ -241,16 +218,23 @@ export function OpenSourceSection() {
             aria-roledescription="carousel"
             tabIndex={0}
             onKeyDown={handleKeyDown}
-            aria-live="polite"
           >
+            {/* Screen-reader status — announces only the active card */}
+            <p className="sr-only" aria-live="polite">
+              Contribution {activeIndex + 1} of {totalCards}: {activeContribution.title}
+            </p>
+
             {/* Desktop Carousel (3 cards) — stable slots, content crossfades */}
             <div className="hidden lg:flex items-center justify-center gap-6 overflow-hidden py-4">
               {[0, 1, 2].map((slotIndex) => {
                 const isCenter = slotIndex === 1;
                 const contribution = visibleCards[slotIndex];
                 return (
-                  <motion.div
+                  <m.div
                     key={slotIndex}
+                    // Side cards are decorative previews — keep them out of the
+                    // a11y tree and tab order so only the active card is exposed.
+                    inert={!isCenter || undefined}
                     animate={{
                       opacity: isCenter ? 1 : 0.5,
                       scale: isCenter ? 1 : 0.92,
@@ -275,7 +259,7 @@ export function OpenSourceSection() {
                   >
                     {isCenter ? (
                       <AnimatePresence mode="popLayout" custom={direction} initial={false}>
-                        <motion.div
+                        <m.div
                           key={contribution.id}
                           custom={direction}
                           variants={slideVariants}
@@ -292,7 +276,7 @@ export function OpenSourceSection() {
                             contribution={contribution}
                             isCenter={true}
                           />
-                        </motion.div>
+                        </m.div>
                       </AnimatePresence>
                     ) : (
                       <ContributionCard
@@ -300,7 +284,7 @@ export function OpenSourceSection() {
                         isCenter={false}
                       />
                     )}
-                  </motion.div>
+                  </m.div>
                 );
               })}
             </div>
@@ -312,8 +296,8 @@ export function OpenSourceSection() {
               onTouchEnd={handleTouchEnd}
             >
               <AnimatePresence mode="popLayout" custom={direction} initial={false}>
-                <motion.div
-                  key={featuredContributions[activeIndex].id}
+                <m.div
+                  key={activeContribution.id}
                   custom={direction}
                   variants={slideVariants}
                   initial="enter"
@@ -329,25 +313,25 @@ export function OpenSourceSection() {
                   aria-label={`Contribution ${activeIndex + 1} of ${totalCards}`}
                 >
                   <ContributionCard
-                    contribution={featuredContributions[activeIndex]}
+                    contribution={activeContribution}
                     isCenter={true}
                   />
-                </motion.div>
+                </m.div>
               </AnimatePresence>
             </div>
 
             {/* Swipe hint (mobile only) */}
-            <motion.p
-              className="lg:hidden text-center text-xs text-neutral-500 mt-2"
+            <m.p
+              className="lg:hidden text-center text-xs text-neutral-400 mt-2"
               initial={{ opacity: 1 }}
               animate={{ opacity: hasSwiped ? 0 : 1 }}
               transition={{ duration: 0.4 }}
             >
               Swipe to explore
-            </motion.p>
+            </m.p>
 
             {/* Arrow Buttons (desktop only) */}
-            <motion.button
+            <m.button
               onClick={goToPrev}
               aria-label="Previous contribution"
               disabled={isAnimating}
@@ -364,9 +348,9 @@ export function OpenSourceSection() {
               )}
             >
               <ChevronLeft size={18} />
-            </motion.button>
+            </m.button>
 
-            <motion.button
+            <m.button
               onClick={goToNext}
               aria-label="Next contribution"
               disabled={isAnimating}
@@ -383,13 +367,13 @@ export function OpenSourceSection() {
               )}
             >
               <ChevronRight size={18} />
-            </motion.button>
+            </m.button>
           </div>
 
           {/* Dot Indicators */}
           <div className="flex justify-center gap-1 pt-2" aria-label="Carousel navigation">
             {featuredContributions.map((_, i) => (
-              <motion.button
+              <m.button
                 key={i}
                 aria-label={`Go to contribution ${i + 1}`}
                 aria-current={activeIndex === i ? 'true' : undefined}
@@ -397,7 +381,7 @@ export function OpenSourceSection() {
                 className="min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
                 whileTap={{ scale: 0.9 }}
               >
-                <motion.span
+                <m.span
                   layout
                   className={cn(
                     'h-2 rounded-full transition-colors duration-300',
@@ -410,7 +394,7 @@ export function OpenSourceSection() {
                   } : undefined}
                   transition={{ type: 'spring', stiffness: 400, damping: 28 }}
                 />
-              </motion.button>
+              </m.button>
             ))}
           </div>
         </div>
@@ -456,13 +440,13 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'bug fix':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
+        return 'bg-red-900/50 text-red-200'
       case 'feature':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200'
+        return 'bg-green-900/50 text-green-200'
       case 'enhancement':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200'
+        return 'bg-blue-900/50 text-blue-200'
       case 'documentation':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200'
+        return 'bg-purple-900/50 text-purple-200'
       default:
         return 'badge-neutral'
     }
@@ -471,11 +455,11 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
   const displayedTech = contribution.tech.slice(0, 4);
 
   return (
-    <motion.article
+    <m.article
       className={cn(
         'rounded-xl p-6 min-h-[440px] flex flex-col transition-[border-color,box-shadow] duration-300',
         isCenter
-          ? 'backdrop-blur-xs bg-white/[0.06] border border-[rgba(56,189,248,0.3)]'
+          ? 'backdrop-blur-xs bg-white/[0.06] border border-primary-400/30'
           : 'glass-card'
       )}
       style={isCenter ? {
@@ -492,28 +476,28 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
         <div className="flex items-center space-x-2 min-w-0 flex-1">
           <span className="text-2xl flex-shrink-0">{getTypeIcon(contribution.type)}</span>
           <div className="min-w-0">
-            <h4 className="font-semibold text-neutral-900 dark:text-white truncate" title={contribution.title}>
+            <h4 className="font-semibold text-white truncate" title={contribution.title}>
               {contribution.title}
             </h4>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate" title={contribution.repository}>
+            <p className="text-sm text-neutral-400 truncate" title={contribution.repository}>
               {contribution.repository}
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-1 px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200 text-sm font-medium rounded-full flex-shrink-0 ml-2">
+        <div className="flex items-center space-x-1 px-2 py-1 bg-green-900/50 text-green-200 text-sm font-medium rounded-full flex-shrink-0 ml-2">
           <DollarSign size={12} />
           <span>{contribution.reward}</span>
         </div>
       </div>
 
       {/* Content */}
-      <p className="text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed line-clamp-3">
+      <p className="text-neutral-300 mb-4 leading-relaxed line-clamp-3">
         {contribution.description}
       </p>
 
       {/* Impact */}
-      <div className="mb-4 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
-        <p className="text-primary-800 dark:text-primary-200 text-sm font-medium line-clamp-2">
+      <div className="mb-4 p-3 bg-primary-900/20 rounded-lg">
+        <p className="text-primary-200 text-sm font-medium line-clamp-2">
           <strong>Impact:</strong> {contribution.impact}
         </p>
       </div>
@@ -532,37 +516,37 @@ function ContributionCard({ contribution, isCenter }: ContributionCardProps) {
 
       {/* Maintainer Feedback */}
       {contribution.maintainerFeedback && (
-        <div className="mb-4 p-3 bg-neutral-100 dark:bg-neutral-700 rounded-lg border-l-4 border-primary-500">
+        <div className="mb-4 p-3 bg-neutral-700 rounded-lg border-l-4 border-primary-500">
           <div className="flex items-center space-x-2 mb-2">
-            <MessageSquare size={14} className="text-primary-600 dark:text-primary-400" />
-            <span className="text-sm font-medium text-neutral-900 dark:text-white">
+            <MessageSquare size={14} className="text-primary-400" />
+            <span className="text-sm font-medium text-white">
               Maintainer Feedback
             </span>
           </div>
-          <p className="text-sm text-neutral-700 dark:text-neutral-300 italic line-clamp-2">
+          <p className="text-sm text-neutral-300 italic line-clamp-2">
             &quot;{contribution.maintainerFeedback}&quot;
           </p>
         </div>
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-600 mt-auto">
+      <div className="flex items-center justify-between pt-4 border-t border-neutral-600 mt-auto">
         <div className="flex items-center space-x-4">
           <Link
             href={contribution.links.pr}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors text-sm focus-ring py-2"
+            className="inline-flex items-center space-x-1 text-neutral-400 hover:text-white transition-colors text-sm focus-ring py-2"
           >
             <GitPullRequest size={14} />
             <span>View PR</span>
           </Link>
         </div>
-        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+        <div className="text-xs text-neutral-400">
           {formatDate(contribution.date)}
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -587,8 +571,7 @@ function CountUp({
     const el = ref.current;
     if (!el) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
+    if (getPrefersReducedMotion()) {
       setCount(end);
       return;
     }

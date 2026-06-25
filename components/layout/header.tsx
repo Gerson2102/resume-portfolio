@@ -56,7 +56,7 @@ export function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled || isMobileMenuOpen
-          ? 'bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md border-b border-neutral-200/50 dark:border-neutral-700/50'
+          ? 'bg-neutral-950/95 backdrop-blur-md border-b border-neutral-700/50'
           : 'bg-transparent'
       )}
     >
@@ -65,7 +65,7 @@ export function Header() {
           {/* Logo */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-2xl font-bold text-neutral-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus-ring cursor-pointer"
+            className="text-2xl font-bold text-white hover:text-primary-400 transition-colors focus-ring cursor-pointer"
           >
             Gerson
           </button>
@@ -82,7 +82,7 @@ export function Header() {
                     handleNavClick(item.href)
                   }
                 }}
-                className="text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring"
+                className="text-neutral-300 hover:text-white transition-colors focus-ring"
               >
                 {item.name}
               </Link>
@@ -95,7 +95,7 @@ export function Header() {
               href={SOCIAL_LINKS.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-ring"
+              className="p-2 rounded-lg text-neutral-300 hover:text-white hover:bg-neutral-800 transition-colors focus-ring"
               aria-label="GitHub"
               title="GitHub"
             >
@@ -117,8 +117,10 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-ring"
+            className="lg:hidden p-2 rounded-lg text-neutral-300 hover:text-white hover:bg-neutral-800 transition-colors focus-ring"
             aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -126,7 +128,7 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden mt-4 py-4 border-t border-neutral-200 dark:border-neutral-700 animate-fade-in">
+          <div id="mobile-menu" className="lg:hidden mt-4 py-4 border-t border-neutral-700 animate-fade-in">
             <div className="flex flex-col space-y-4">
               {navigation.map((item) => (
                 <Link
@@ -138,19 +140,19 @@ export function Header() {
                     }
                     handleNavClick(item.href)
                   }}
-                  className="text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring py-2"
+                  className="text-neutral-300 hover:text-white transition-colors focus-ring py-2"
                 >
                   {item.name}
                 </Link>
               ))}
 
-              <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="flex items-center justify-between pt-4 border-t border-neutral-700">
                 <div className="flex items-center space-x-4">
                   <Link
                     href={SOCIAL_LINKS.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-ring"
+                    className="p-2 rounded-lg text-neutral-300 hover:text-white hover:bg-neutral-800 transition-colors focus-ring"
                     aria-label="GitHub"
                   >
                     <Github size={20} />

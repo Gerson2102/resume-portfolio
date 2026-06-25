@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { OptimizedImage } from './image'
 import { cn } from '@/lib/utils'
@@ -28,6 +28,9 @@ export function Lightbox({
   onPrevious
 }: LightboxProps) {
   const [mounted, setMounted] = useState(false)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const previouslyFocused = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -46,6 +49,16 @@ export function Lightbox({
     }
   }, [isOpen])
 
+  // Move focus into the dialog on open; restore it to the trigger on close.
+  useEffect(() => {
+    if (!isOpen) return
+    previouslyFocused.current = document.activeElement as HTMLElement | null
+    closeButtonRef.current?.focus()
+    return () => {
+      previouslyFocused.current?.focus?.()
+    }
+  }, [isOpen])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return
@@ -60,6 +73,27 @@ export function Lightbox({
         case 'ArrowRight':
           onNext?.()
           break
+        case 'Tab': {
+          // Trap focus within the dialog.
+          const dialog = dialogRef.current
+          if (!dialog) return
+          const focusables = Array.from(
+            dialog.querySelectorAll<HTMLElement>(
+              'button, [href], [tabindex]:not([tabindex="-1"])'
+            )
+          )
+          if (focusables.length === 0) return
+          const first = focusables[0]
+          const last = focusables[focusables.length - 1]
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+          break
+        }
       }
     }
 
@@ -74,11 +108,16 @@ export function Lightbox({
 
   return createPortal(
     <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={currentImage.caption || 'Image viewer'}
       className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xs animate-fade-in"
       onClick={onClose}
     >
       {/* Close button */}
       <button
+        ref={closeButtonRef}
         onClick={onClose}
         className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors focus-ring"
         aria-label="Close lightbox"

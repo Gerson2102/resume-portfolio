@@ -3,16 +3,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { ExternalLink, Calendar, MapPin, Building2, CheckCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
+import { m, AnimatePresence } from 'framer-motion';
+import { gsap } from '@/lib/gsap';
 import { OptimizedImage } from '@/components/ui/image';
+import { RevealHeading } from '@/components/ui/reveal-heading';
+import { getPrefersReducedMotion, usePrefersReducedMotion } from '@/lib/hooks/use-prefers-reduced-motion';
 import experienceData from '@/data/experience.json';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -26,34 +22,12 @@ type Experience = (typeof experienceData)[0];
 
 export function ExperienceSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    if (getPrefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.fromTo(
-          splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
       if (cardRef.current) {
         gsap.fromTo(
           cardRef.current,
@@ -79,20 +53,17 @@ export function ExperienceSection() {
   const experience = experienceData[0];
 
   return (
-    <section ref={sectionRef} id="experience" className="section-padding bg-white dark:bg-neutral-900">
+    <section ref={sectionRef} id="experience" className="section-padding bg-neutral-900">
       <div className="container-max">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-accent-100 dark:bg-accent-900/50 text-accent-800 dark:text-accent-200 rounded-full text-sm font-medium">
+          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-accent-900/50 text-accent-200 rounded-full text-sm font-medium">
             <Building2 size={16} />
             <span>Professional Experience</span>
           </div>
-          <h2
-            ref={titleRef}
-            className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
+          <RevealHeading as="h2" className="text-3xl md:text-4xl font-bold text-white mb-4">
             Building Web3 Infrastructure
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+          </RevealHeading>
+          <p className="text-lg text-neutral-300 max-w-3xl mx-auto">
             Hands-on experience with leading Web3 companies, contributing to core Ethereum
             infrastructure and advancing the ecosystem through production-ready code.
           </p>
@@ -110,13 +81,7 @@ function ExperienceCard({ experience }: { experience: Experience }) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
   return (
-    <div
-      className="glass-card rounded-xl overflow-hidden"
-      style={{
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: '0 0 40px rgba(56, 189, 248, 0.04)',
-      }}
-    >
+    <div className="glass-card rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_0_40px_rgba(56,189,248,0.04)]">
       <div className="flex flex-col md:flex-row">
         <CompanyIdentity experience={experience} />
         <div className="flex-1 min-w-0">
@@ -130,11 +95,8 @@ function ExperienceCard({ experience }: { experience: Experience }) {
 
 function CompanyIdentity({ experience }: { experience: Experience }) {
   return (
-    <div
-      className="p-6 md:p-7 md:w-[220px] lg:w-[280px] shrink-0 flex flex-col items-center md:items-start border-b md:border-b-0 md:border-r"
-      style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}
-    >
-      <div className="w-16 h-16 md:w-16 md:h-16 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700 mb-4">
+    <div className="p-6 md:p-7 md:w-[220px] lg:w-[280px] shrink-0 flex flex-col items-center md:items-start border-b md:border-b-0 md:border-r border-white/[0.06]">
+      <div className="w-16 h-16 md:w-16 md:h-16 rounded-xl overflow-hidden bg-neutral-700 mb-4">
         {experience.images ? (
           <OptimizedImage
             src={experience.images[0]}
@@ -179,7 +141,7 @@ function CompanyIdentity({ experience }: { experience: Experience }) {
             href={experience.links.company}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm text-primary-400 hover:text-primary-300 transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-primary-400 hover:text-primary-300 transition-colors focus-ring"
           >
             <span>{experience.company}</span>
             <ExternalLink size={12} />
@@ -190,7 +152,7 @@ function CompanyIdentity({ experience }: { experience: Experience }) {
             href={experience.links.alpen}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm text-primary-400 hover:text-primary-300 transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-primary-400 hover:text-primary-300 transition-colors focus-ring"
           >
             <span>Alpen Labs</span>
             <ExternalLink size={12} />
@@ -210,11 +172,7 @@ function TabBar({
 }) {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }, []);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const updateIndicator = useCallback(() => {
     const activeIndex = TABS.findIndex((t) => t.id === activeTab);
@@ -252,10 +210,7 @@ function TabBar({
   };
 
   return (
-    <div
-      className="relative overflow-x-auto"
-      style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}
-    >
+    <div className="relative overflow-x-auto border-b border-white/[0.06]">
       <div className="flex" role="tablist" onKeyDown={handleKeyDown}>
         {TABS.map((tab, i) => (
           <button
@@ -281,7 +236,7 @@ function TabBar({
       </div>
 
       {indicator.width > 0 && (
-        <motion.div
+        <m.div
           className="absolute bottom-0 h-0.5 bg-primary-400 rounded-full"
           animate={{ left: indicator.left, width: indicator.width }}
           transition={
@@ -302,11 +257,7 @@ function ContentPanel({
   activeTab: TabId;
   experience: Experience;
 }) {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }, []);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const motionProps = prefersReducedMotion
     ? {}
@@ -314,13 +265,13 @@ function ContentPanel({
         initial: { opacity: 0, y: 8 },
         animate: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: -8 },
-        transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] },
+        transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] as const },
       };
 
   return (
     <div className="min-h-[320px]" aria-live="polite">
       <AnimatePresence mode="wait">
-        <motion.div
+        <m.div
           key={activeTab}
           {...motionProps}
           role="tabpanel"
@@ -336,7 +287,7 @@ function ContentPanel({
             <AchievementsPanel achievements={experience.achievements} />
           )}
           {activeTab === 'tech' && <TechStackPanel technologies={experience.technologies} />}
-        </motion.div>
+        </m.div>
       </AnimatePresence>
     </div>
   );
@@ -346,13 +297,7 @@ function OverviewPanel({ experience }: { experience: Experience }) {
   return (
     <div className="space-y-6">
       <p className="text-base text-neutral-300 leading-relaxed">{experience.description}</p>
-      <div
-        className="rounded-r-lg p-4"
-        style={{
-          borderLeft: '2px solid var(--color-primary-400)',
-          background: 'rgba(56, 189, 248, 0.04)',
-        }}
-      >
+      <div className="rounded-r-lg p-4 border-l-2 border-primary-400 bg-primary-400/[0.04]">
         <p className="text-sm text-neutral-300">
           Contributed directly to Ethereum core infrastructure used in production by validators
           worldwide.
@@ -381,21 +326,7 @@ function AchievementsPanel({ achievements }: { achievements: string[] }) {
       {achievements.map((item, i) => (
         <div
           key={i}
-          className="flex items-start gap-3 p-4 rounded-lg transition-all duration-200 cursor-default"
-          style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(74, 222, 128, 0.3)';
-            e.currentTarget.style.boxShadow = '0 0 16px rgba(74, 222, 128, 0.08)';
-            e.currentTarget.style.background = 'rgba(74, 222, 128, 0.04)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-            e.currentTarget.style.boxShadow = 'none';
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-          }}
+          className="flex items-start gap-3 p-4 rounded-lg cursor-default bg-white/[0.03] border border-white/[0.06] transition-all duration-200 hover:bg-green-400/[0.04] hover:border-green-400/30 hover:shadow-[0_0_16px_rgba(74,222,128,0.08)]"
         >
           <CheckCircle size={18} className="text-green-400 shrink-0 mt-0.5" />
           <span className="text-sm text-neutral-300">{item}</span>
@@ -411,19 +342,7 @@ function TechStackPanel({ technologies }: { technologies: string[] }) {
       {technologies.map((tech) => (
         <span
           key={tech}
-          className="px-4 py-2 rounded-full text-sm text-neutral-200 transition-all duration-200 cursor-default hover:border-primary-400/30"
-          style={{
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-            e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-          }}
+          className="px-4 py-2 rounded-full text-sm text-neutral-200 cursor-default bg-white/5 border border-white/10 transition-all duration-200 hover:bg-white/[0.08] hover:border-primary-400/30"
         >
           {tech}
         </span>

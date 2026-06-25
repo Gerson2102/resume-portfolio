@@ -3,24 +3,18 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ExternalLink, Calendar, MapPin, Users, Mic, Clock } from 'lucide-react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
+import { gsap } from '@/lib/gsap';
 import { OptimizedImage } from '@/components/ui/image';
 import { Gallery } from '@/components/ui/lightbox';
+import { RevealHeading } from '@/components/ui/reveal-heading';
+import { getPrefersReducedMotion } from '@/lib/hooks/use-prefers-reduced-motion';
 import { formatDate } from '@/lib/utils';
 import talksData from '@/data/talks.json';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 type Talk = typeof talksData[0];
 
 export function SpeakingSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const ctaTitleRef = useRef<HTMLHeadingElement>(null);
   const splitContainerRef = useRef<HTMLDivElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const contentBlocksRef = useRef<HTMLDivElement[]>([]);
@@ -28,51 +22,11 @@ export function SpeakingSection() {
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = getPrefersReducedMotion();
     setReducedMotion(prefersReducedMotion);
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Title animation
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.fromTo(splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
-      // CTA section title animation
-      if (ctaTitleRef.current) {
-        const splitCtaTitle = new SplitType(ctaTitleRef.current, { types: 'chars' });
-        gsap.fromTo(splitCtaTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: ctaTitleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
       // Desktop pin — only on lg+
       const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
       if (isDesktop && splitContainerRef.current && leftPanelRef.current) {
@@ -140,18 +94,18 @@ export function SpeakingSection() {
   const otherTalks = sortedTalks.slice(1);
 
   return (
-    <section ref={sectionRef} id="speaking" className="section-padding bg-neutral-50 dark:bg-neutral-800">
+    <section ref={sectionRef} id="speaking" className="section-padding bg-neutral-800">
       {/* Section Header — normal container */}
       <div className="container-max">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-accent-100 dark:bg-accent-900/50 text-accent-800 dark:text-accent-200 rounded-full text-sm font-medium">
+          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-accent-900/50 text-accent-200 rounded-full text-sm font-medium">
             <Mic size={16} />
             <span>Speaking & Education</span>
           </div>
-          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <RevealHeading as="h2" className="text-3xl md:text-4xl font-bold text-white mb-4">
             Sharing Knowledge
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+          </RevealHeading>
+          <p className="text-lg text-neutral-300 max-w-3xl mx-auto">
             Passionate about educating the Latin American developer community about Web3 and blockchain technology.
             Speaking at conferences to promote practical applications beyond speculation.
           </p>
@@ -214,10 +168,10 @@ export function SpeakingSection() {
 
         {/* Speaking Availability CTA */}
         <div className="cta-card text-center mt-12 p-8 glass-card rounded-xl">
-          <h3 ref={ctaTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">
+          <RevealHeading as="h3" className="text-2xl font-semibold text-white mb-4">
             Available for Speaking
-          </h3>
-          <p className="text-neutral-600 dark:text-neutral-300 mb-6 max-w-2xl mx-auto">
+          </RevealHeading>
+          <p className="text-neutral-300 mb-6 max-w-2xl mx-auto">
             Interested in having me speak at your event? I&apos;m available for conferences, meetups,
             and workshops on Web3 development, Starknet, and blockchain applications.
           </p>
@@ -238,6 +192,129 @@ export function SpeakingSection() {
   );
 }
 
+/* ─── Shared talk content (single source for desktop + mobile layouts) ─── */
+
+function TalkMetaItems({ talk }: { talk: Talk }) {
+  return (
+    <>
+      <span className="inline-flex items-center gap-1.5">
+        <Calendar size={14} />
+        {formatDate(talk.date)}
+      </span>
+      <span className="inline-flex items-center gap-1.5">
+        <MapPin size={14} />
+        {talk.location}
+      </span>
+      <span className="inline-flex items-center gap-1.5">
+        <Users size={14} />
+        {talk.audience}
+      </span>
+      {talk.duration && (
+        <span className="inline-flex items-center gap-1.5">
+          <Clock size={14} />
+          {talk.duration}
+        </span>
+      )}
+    </>
+  );
+}
+
+interface TalkContentProps {
+  talk: Talk;
+  /** Desktop split-scroll registers each block for the staggered GSAP reveal. */
+  registerBlock?: (el: HTMLDivElement | null, index: number) => void;
+}
+
+function TalkContent({ talk, registerBlock }: TalkContentProps) {
+  const blockRef = (index: number) =>
+    registerBlock ? (el: HTMLDivElement | null) => registerBlock(el, index) : undefined;
+
+  return (
+    <>
+      {/* About This Talk */}
+      <div ref={blockRef(1)}>
+        <h3 className="text-lg font-semibold text-white mb-3">About This Talk</h3>
+        <p className="text-base text-neutral-300 leading-relaxed">{talk.abstract}</p>
+      </div>
+
+      {/* Key Takeaways */}
+      {talk.keyTakeaways && talk.keyTakeaways.length > 0 && (
+        <div ref={blockRef(2)}>
+          <h3 className="text-lg font-semibold text-white mb-3">Key Takeaways</h3>
+          <div className="space-y-3">
+            {talk.keyTakeaways.map((takeaway, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-3 bg-white/[0.03] border border-white/6 rounded-lg p-4"
+              >
+                <div className="w-2 h-2 bg-accent-400 rounded-full mt-1.5 shrink-0" />
+                <span className="text-neutral-300">{takeaway}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Topics Covered */}
+      {talk.topics && talk.topics.length > 0 && (
+        <div ref={blockRef(3)}>
+          <h3 className="text-lg font-semibold text-white mb-3">Topics Covered</h3>
+          <div className="flex flex-wrap gap-2">
+            {talk.topics.map((topic) => (
+              <span key={topic} className="badge-accent text-sm">
+                {topic}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Feedback */}
+      {talk.testimonials && talk.testimonials.length > 0 && (
+        <div ref={blockRef(4)}>
+          <h3 className="text-lg font-semibold text-white mb-3">Feedback</h3>
+          <div className="space-y-4">
+            {talk.testimonials.map((testimonial, i) => (
+              <blockquote key={i} className="border-l-2 border-primary-400 pl-4 py-1">
+                <p className="text-neutral-300 italic">&ldquo;{testimonial.text}&rdquo;</p>
+                <cite className="text-primary-400 text-sm not-italic mt-1 block">
+                  &mdash; {testimonial.author}
+                </cite>
+              </blockquote>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Links */}
+      <div ref={blockRef(5)} className="flex flex-wrap gap-4">
+        {talk.links.slides && (
+          <Link
+            href={talk.links.slides}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary inline-flex items-center gap-2"
+          >
+            View Slides
+            <ExternalLink size={14} />
+          </Link>
+        )}
+        {talk.links.event && (
+          <Link
+            href={talk.links.event}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary inline-flex items-center gap-2"
+          >
+            Event Page
+            <ExternalLink size={14} />
+          </Link>
+        )}
+      </div>
+    </>
+  );
+}
+
 /* ─── Featured Talk: Split-Scroll Layout ─── */
 
 interface FeaturedTalkProps {
@@ -255,20 +332,12 @@ function FeaturedTalk({
   contentBlocksRef,
   reducedMotion,
 }: FeaturedTalkProps) {
-  const galleryImages = talk.images.map((imagePath) => ({
-    src: imagePath,
-    alt: `${talk.title} at ${talk.event}`,
-    caption: `${talk.title} - ${talk.event}`,
-  }));
-
-  const addContentRef = (el: HTMLDivElement | null, index: number) => {
+  const registerBlock = (el: HTMLDivElement | null, index: number) => {
     if (el) contentBlocksRef.current[index] = el;
   };
 
-  // On reduced motion or mobile, render stacked layout
-  // On desktop, render split layout with pin
-  // We use CSS to show/hide — GSAP pin only fires on desktop
-
+  // On reduced motion or mobile, render stacked layout.
+  // On desktop, render split layout with pin (GSAP pin only fires on desktop).
   return (
     <>
       {/* ── Desktop Split Layout (lg+) ── */}
@@ -323,107 +392,14 @@ function FeaturedTalk({
         {/* Right Panel — Scrolling Content */}
         <div className="w-[45%] pl-10 space-y-12 py-8">
           {/* Metadata */}
-          <div ref={(el) => addContentRef(el, 0)} className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-400">
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar size={14} />
-              {formatDate(talk.date)}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin size={14} />
-              {talk.location}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Users size={14} />
-              {talk.audience}
-            </span>
-            {talk.duration && (
-              <span className="inline-flex items-center gap-1.5">
-                <Clock size={14} />
-                {talk.duration}
-              </span>
-            )}
+          <div
+            ref={(el) => registerBlock(el, 0)}
+            className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-400"
+          >
+            <TalkMetaItems talk={talk} />
           </div>
 
-          {/* About This Talk */}
-          <div ref={(el) => addContentRef(el, 1)}>
-            <h3 className="text-lg font-semibold text-white mb-3">About This Talk</h3>
-            <p className="text-base text-neutral-300 leading-relaxed">{talk.abstract}</p>
-          </div>
-
-          {/* Key Takeaways */}
-          {talk.keyTakeaways && talk.keyTakeaways.length > 0 && (
-            <div ref={(el) => addContentRef(el, 2)}>
-              <h3 className="text-lg font-semibold text-white mb-3">Key Takeaways</h3>
-              <div className="space-y-3">
-                {talk.keyTakeaways.map((takeaway, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 bg-white/[0.03] border border-white/6 rounded-lg p-4"
-                  >
-                    <div className="w-2 h-2 bg-accent-400 rounded-full mt-1.5 shrink-0" />
-                    <span className="text-neutral-300">{takeaway}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Topics Covered */}
-          {talk.topics && talk.topics.length > 0 && (
-            <div ref={(el) => addContentRef(el, 3)}>
-              <h3 className="text-lg font-semibold text-white mb-3">Topics Covered</h3>
-              <div className="flex flex-wrap gap-2">
-                {talk.topics.map((topic) => (
-                  <span key={topic} className="badge-accent text-sm">
-                    {topic}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Feedback */}
-          {talk.testimonials && talk.testimonials.length > 0 && (
-            <div ref={(el) => addContentRef(el, 4)}>
-              <h3 className="text-lg font-semibold text-white mb-3">Feedback</h3>
-              <div className="space-y-4">
-                {talk.testimonials.map((testimonial, i) => (
-                  <blockquote key={i} className="border-l-2 border-primary-400 pl-4 py-1">
-                    <p className="text-neutral-300 italic">&ldquo;{testimonial.text}&rdquo;</p>
-                    <cite className="text-primary-400 text-sm not-italic mt-1 block">
-                      &mdash; {testimonial.author}
-                    </cite>
-                  </blockquote>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Links */}
-          <div ref={(el) => addContentRef(el, 5)} className="flex flex-wrap gap-4">
-            {talk.links.slides && (
-              <Link
-                href={talk.links.slides}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary inline-flex items-center gap-2"
-              >
-                View Slides
-                <ExternalLink size={14} />
-              </Link>
-            )}
-            {talk.links.event && (
-              <Link
-                href={talk.links.event}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary inline-flex items-center gap-2"
-              >
-                Event Page
-                <ExternalLink size={14} />
-              </Link>
-            )}
-          </div>
+          <TalkContent talk={talk} registerBlock={registerBlock} />
         </div>
       </div>
 
@@ -470,106 +446,14 @@ function FeaturedTalk({
 
         {/* Metadata */}
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-neutral-400 mb-8">
-          <span className="inline-flex items-center gap-1.5">
-            <Calendar size={14} />
-            {formatDate(talk.date)}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <MapPin size={14} />
-            {talk.location}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Users size={14} />
-            {talk.audience}
-          </span>
-          {talk.duration && (
-            <span className="inline-flex items-center gap-1.5">
-              <Clock size={14} />
-              {talk.duration}
-            </span>
-          )}
+          <TalkMetaItems talk={talk} />
         </div>
 
         {/* Content blocks */}
         <div className="space-y-8">
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-3">About This Talk</h3>
-            <p className="text-base text-neutral-300 leading-relaxed">{talk.abstract}</p>
-          </div>
-
-          {talk.keyTakeaways && talk.keyTakeaways.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-3">Key Takeaways</h3>
-              <div className="space-y-3">
-                {talk.keyTakeaways.map((takeaway, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 bg-white/[0.03] border border-white/6 rounded-lg p-4"
-                  >
-                    <div className="w-2 h-2 bg-accent-400 rounded-full mt-1.5 shrink-0" />
-                    <span className="text-neutral-300">{takeaway}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {talk.topics && talk.topics.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-3">Topics Covered</h3>
-              <div className="flex flex-wrap gap-2">
-                {talk.topics.map((topic) => (
-                  <span key={topic} className="badge-accent text-sm">
-                    {topic}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {talk.testimonials && talk.testimonials.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-3">Feedback</h3>
-              <div className="space-y-4">
-                {talk.testimonials.map((testimonial, i) => (
-                  <blockquote key={i} className="border-l-2 border-primary-400 pl-4 py-1">
-                    <p className="text-neutral-300 italic">&ldquo;{testimonial.text}&rdquo;</p>
-                    <cite className="text-primary-400 text-sm not-italic mt-1 block">
-                      &mdash; {testimonial.author}
-                    </cite>
-                  </blockquote>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-4">
-            {talk.links.slides && (
-              <Link
-                href={talk.links.slides}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary inline-flex items-center gap-2"
-              >
-                View Slides
-                <ExternalLink size={14} />
-              </Link>
-            )}
-            {talk.links.event && (
-              <Link
-                href={talk.links.event}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary inline-flex items-center gap-2"
-              >
-                Event Page
-                <ExternalLink size={14} />
-              </Link>
-            )}
-          </div>
+          <TalkContent talk={talk} />
         </div>
       </div>
-
     </>
   );
 }

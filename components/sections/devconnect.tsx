@@ -3,16 +3,12 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { Play, Pause, Volume2, VolumeX, Award, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import SplitType from 'split-type'
+import { gsap } from '@/lib/gsap'
 import { cn } from '@/lib/utils'
 import { GlowCard } from '@/components/ui/glow-card'
+import { RevealHeading } from '@/components/ui/reveal-heading'
+import { getPrefersReducedMotion } from '@/lib/hooks/use-prefers-reduced-motion'
 import devconnectData from '@/data/devconnect.json'
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
 
 // ---------------------------------------------------------------------------
 // Sub-component: VideoCarousel
@@ -318,9 +314,6 @@ function ConnectionCard({ connection }: ConnectionCardProps) {
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-white transition-colors focus-ring rounded-sm p-1"
             aria-label={`${connection.name} on X`}
-            style={{
-              boxShadow: undefined,
-            }}
           >
             <span aria-hidden="true">&rarr;</span>
             <span className="sr-only">(opens in new tab)</span>
@@ -337,8 +330,6 @@ function ConnectionCard({ connection }: ConnectionCardProps) {
 
 export function DevconnectSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const connectionsRef = useRef<HTMLHeadingElement>(null)
   const interviewBlockRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const credentialRef = useRef<HTMLDivElement>(null)
@@ -363,31 +354,9 @@ export function DevconnectSection() {
   }, [])
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) return
+    if (getPrefersReducedMotion()) return
 
     const ctx = gsap.context(() => {
-      // ----- Block 1: SplitType title -----
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { types: 'chars' })
-        gsap.fromTo(
-          splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        )
-      }
-
       // ----- Block 2: Interview block (unified) -----
       if (interviewBlockRef.current) {
         gsap.fromTo(
@@ -402,27 +371,6 @@ export function DevconnectSection() {
             opacity: 1,
             y: 0,
             duration: 0.8,
-            ease: 'power2.out',
-          }
-        )
-      }
-
-      // ----- Block 3: SplitType connections title -----
-      if (connectionsRef.current) {
-        const splitConnections = new SplitType(connectionsRef.current, { types: 'chars' })
-        gsap.fromTo(
-          splitConnections.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: connectionsRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
             ease: 'power2.out',
           }
         )
@@ -485,12 +433,12 @@ export function DevconnectSection() {
               Ethereum Foundation Scholar
             </span>
           </div>
-          <h2
-            ref={titleRef}
+          <RevealHeading
+            as="h2"
             className="text-3xl md:text-4xl font-bold text-white mb-4"
           >
             Devconnect 2025
-          </h2>
+          </RevealHeading>
           <p className="text-lg text-neutral-300 max-w-3xl mx-auto">
             Selected as an Ethereum Foundation scholarship recipient for Devconnect
             — the premier event in the Ethereum ecosystem. Buenos Aires, Argentina.
@@ -554,12 +502,12 @@ export function DevconnectSection() {
                 Key Connections
               </span>
             </div>
-            <h3
-              ref={connectionsRef}
+            <RevealHeading
+              as="h3"
               className="text-2xl md:text-3xl font-bold text-white"
             >
               Builders &amp; Cypherpunks
-            </h3>
+            </RevealHeading>
           </div>
 
           {/* Desktop grid */}

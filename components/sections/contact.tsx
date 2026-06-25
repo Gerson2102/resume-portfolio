@@ -1,116 +1,22 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { MessageCircle, Mail, Calendar, MapPin, Github, Linkedin } from 'lucide-react';
-import { motion, m } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
+import { MessageCircle, Mail, Calendar, MapPin } from 'lucide-react';
+import { m } from 'framer-motion';
+import { RevealHeading } from '@/components/ui/reveal-heading';
+import { socialIcons } from '@/components/ui/icons';
 import { SOCIAL_LINKS, CONTACT_INFO } from '@/lib/utils';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-function XIcon({ size = 24 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-
-const socialIcons = {
-  github: Github,
-  twitter: XIcon,
-  linkedin: Linkedin,
-  telegram: MessageCircle,
-}
-
 export function ContactSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const opportunitiesTitleRef = useRef<HTMLHeadingElement>(null);
-  const contactTitleRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      // Main title animation
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.fromTo(splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
-      // Opportunities title animation
-      if (opportunitiesTitleRef.current) {
-        const splitOpportunitiesTitle = new SplitType(opportunitiesTitleRef.current, { types: 'chars' });
-        gsap.fromTo(splitOpportunitiesTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: opportunitiesTitleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
-      // Contact title animation
-      if (contactTitleRef.current) {
-        const splitContactTitle = new SplitType(contactTitleRef.current, { types: 'chars' });
-        gsap.fromTo(splitContactTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: contactTitleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
   return (
-    <section ref={sectionRef} id="contact" className="section-padding bg-neutral-50 dark:bg-neutral-800">
+    <section id="contact" className="section-padding bg-neutral-800">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-            Let's Build Together
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+          <RevealHeading as="h2" className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Let&apos;s Build Together
+          </RevealHeading>
+          <p className="text-lg text-neutral-300 max-w-3xl mx-auto">
             Open to full-time Web3 developer positions, consulting opportunities, speaking engagements,
             and collaborations on innovative blockchain projects.
           </p>
@@ -118,9 +24,9 @@ export function ContactSection() {
 
         {/* Opportunities Section - Moved up */}
         <div className="space-y-8 mb-16">
-          <h3 ref={opportunitiesTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white text-center">
-            What I'm Looking For
-          </h3>
+          <RevealHeading as="h3" className="text-2xl font-semibold text-white text-center">
+            What I&apos;m Looking For
+          </RevealHeading>
 
           {/* Opportunities Grid - Horizontal Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -133,9 +39,9 @@ export function ContactSection() {
                 'Strong open source track record',
                 'Remote-first preferred'
               ]}
-              bgColor="bg-green-50 dark:bg-green-900/20"
+              bgColor="bg-green-900/20"
               borderColor="border-green-500"
-              textColor="text-green-800 dark:text-green-200"
+              textColor="text-green-200"
             />
 
             <OpportunityCard
@@ -147,9 +53,9 @@ export function ContactSection() {
                 'Open source contribution',
                 'Spanish & English fluency'
               ]}
-              bgColor="bg-blue-50 dark:bg-blue-900/20"
+              bgColor="bg-blue-900/20"
               borderColor="border-blue-500"
-              textColor="text-blue-800 dark:text-blue-200"
+              textColor="text-blue-200"
             />
 
             <OpportunityCard
@@ -161,30 +67,30 @@ export function ContactSection() {
                 'Developer experience optimization',
                 'Technical due diligence'
               ]}
-              bgColor="bg-purple-50 dark:bg-purple-900/20"
+              bgColor="bg-purple-900/20"
               borderColor="border-purple-500"
-              textColor="text-purple-800 dark:text-purple-200"
+              textColor="text-purple-200"
             />
           </div>
         </div>
 
         {/* Get In Touch Section - Redesigned horizontally without image */}
         <div className="space-y-8">
-          <h3 ref={contactTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white text-center">
+          <RevealHeading as="h3" className="text-2xl font-semibold text-white text-center">
             Get In Touch
-          </h3>
+          </RevealHeading>
 
           {/* Primary Contact - Telegram (centered) */}
-          <div className="primary-contact-card max-w-2xl mx-auto p-6 bg-primary-50 dark:bg-primary-900/20 rounded-xl border-l-4 border-primary-500">
+          <div className="primary-contact-card max-w-2xl mx-auto p-6 bg-primary-900/20 rounded-xl border-l-4 border-primary-500">
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center space-x-3">
-                <MessageCircle className="text-primary-600 dark:text-primary-400" size={24} />
-                <span className="text-lg font-semibold text-neutral-900 dark:text-white">
+                <MessageCircle className="text-primary-400" size={24} />
+                <span className="text-lg font-semibold text-white">
                   Preferred Contact
                 </span>
               </div>
-              <p className="text-neutral-700 dark:text-neutral-300">
-                For fastest response, reach out via Telegram. I'm usually online and respond within hours.
+              <p className="text-neutral-300">
+                For fastest response, reach out via Telegram. I&apos;m usually online and respond within hours.
               </p>
               <Link
                 href={SOCIAL_LINKS.telegram}
@@ -202,53 +108,53 @@ export function ContactSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {/* Location (non-interactive) */}
             <div className="contact-detail text-center space-y-3 opacity-80">
-              <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-700/50 rounded-full flex items-center justify-center mx-auto">
-                <MapPin size={24} className="text-neutral-500 dark:text-neutral-500" />
+              <div className="w-12 h-12 bg-neutral-700/50 rounded-full flex items-center justify-center mx-auto">
+                <MapPin size={24} className="text-neutral-400" />
               </div>
               <div>
-                <p className="font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Based in {CONTACT_INFO.location}</p>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">Available for remote work worldwide</p>
+                <p className="font-semibold text-neutral-300 mb-1">Based in {CONTACT_INFO.location}</p>
+                <p className="text-sm text-neutral-400">Available for remote work worldwide</p>
               </div>
             </div>
 
             {/* Email */}
             <div className="contact-detail text-center space-y-3">
-              <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto">
-                <Mail size={24} className="text-neutral-600 dark:text-neutral-400" />
+              <div className="w-12 h-12 bg-neutral-700 rounded-full flex items-center justify-center mx-auto">
+                <Mail size={24} className="text-neutral-400" />
               </div>
               <div>
                 <Link
                   href={`mailto:${CONTACT_INFO.email}`}
-                  className="font-semibold text-neutral-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-ring block mb-1"
+                  className="font-semibold text-white hover:text-primary-400 transition-colors focus-ring block mb-1"
                 >
                   {CONTACT_INFO.email}
                 </Link>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">Professional inquiries welcome</p>
+                <p className="text-sm text-neutral-400">Professional inquiries welcome</p>
               </div>
             </div>
 
             {/* Schedule */}
             <div className="contact-detail text-center space-y-3">
-              <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto">
-                <Calendar size={24} className="text-neutral-600 dark:text-neutral-400" />
+              <div className="w-12 h-12 bg-neutral-700 rounded-full flex items-center justify-center mx-auto">
+                <Calendar size={24} className="text-neutral-400" />
               </div>
               <div>
                 <Link
                   href="https://calendly.com/gersonloavas/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-neutral-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-ring block mb-1"
+                  className="font-semibold text-white hover:text-primary-400 transition-colors focus-ring block mb-1"
                 >
                   Schedule a call
                 </Link>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">Book a time that works for both of us</p>
+                <p className="text-sm text-neutral-400">Book a time that works for both of us</p>
               </div>
             </div>
           </div>
 
           {/* Social Links - Centered */}
           <div className="text-center space-y-4">
-            <h4 className="font-semibold text-neutral-900 dark:text-white">
+            <h4 className="font-semibold text-white">
               Follow My Work
             </h4>
             <div className="flex items-center justify-center space-x-4">
@@ -266,7 +172,7 @@ export function ContactSection() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block p-3 rounded-xl bg-white dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-md transition-all duration-200 focus-ring"
+                      className="block p-3 rounded-xl bg-neutral-700 text-neutral-300 hover:text-primary-400 hover:shadow-md transition-all duration-200 focus-ring"
                       aria-label={`Follow on ${platform}`}
                     >
                       <Icon size={24} />
@@ -311,14 +217,14 @@ function OpportunityCard({
       <h4 className={`font-semibold ${textColor} mb-2`}>
         {title}
       </h4>
-      <p className="text-neutral-700 dark:text-neutral-300 text-sm mb-3">
+      <p className="text-neutral-300 text-sm mb-3">
         {description}
       </p>
       <ul className="space-y-1">
         {highlights.map((highlight, index) => (
           <li key={index} className="flex items-center space-x-2 text-sm">
             <div className={`w-1.5 h-1.5 rounded-full ${borderColor.replace('border-', 'bg-')}`} />
-            <span className="text-neutral-700 dark:text-neutral-300">
+            <span className="text-neutral-300">
               {highlight}
             </span>
           </li>

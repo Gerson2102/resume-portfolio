@@ -1,85 +1,32 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Github, ExternalLink, Award, Calendar } from 'lucide-react';
-import { motion, m } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
+import { m } from 'framer-motion';
 import { OptimizedImage } from '@/components/ui/image';
+import { RevealHeading } from '@/components/ui/reveal-heading';
 import { cn } from '@/lib/utils';
 import projectsData from '@/data/projects.json';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+type Project = Omit<(typeof projectsData)[number], 'links'> & {
+  links: { github?: string; demo?: string; devpost?: string }
 }
 
+const projects = projectsData as Project[]
+
 export function ProjectsSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const additionalTitleRef = useRef<HTMLHeadingElement>(null);
-  const featuredProjects = projectsData.filter(project => project.featured);
-  const otherProjects = projectsData.filter(project => !project.featured);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      // Title animation
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.fromTo(splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
-      // Additional contributions title animation
-      if (additionalTitleRef.current) {
-        const splitAdditionalTitle = new SplitType(additionalTitleRef.current, { types: 'chars' });
-        gsap.fromTo(splitAdditionalTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: additionalTitleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const featuredProjects = projects.filter(project => project.featured);
+  const otherProjects = projects.filter(project => !project.featured);
 
   return (
-    <section ref={sectionRef} id="projects" className="section-padding bg-white dark:bg-neutral-900">
+    <section id="projects" className="section-padding bg-neutral-900">
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <RevealHeading as="h2" className="text-3xl md:text-4xl font-bold text-white mb-4">
             Featured Projects
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+          </RevealHeading>
+          <p className="text-lg text-neutral-300 max-w-3xl mx-auto">
             Building the future of Web3 with innovative applications that solve real problems.
             From arbitration platforms to on-chain games, each project demonstrates technical excellence and practical impact.
           </p>
@@ -87,7 +34,7 @@ export function ProjectsSection() {
 
         {/* Featured Projects Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {featuredProjects.map((project, index) => (
+          {featuredProjects.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
@@ -101,10 +48,10 @@ export function ProjectsSection() {
         {otherProjects.length > 0 && (
           <>
             <div className="text-center mb-12">
-              <h3 ref={additionalTitleRef} className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
+              <RevealHeading as="h3" className="text-2xl font-semibold text-white mb-2">
                 Additional Contributions
-              </h3>
-              <p className="text-neutral-600 dark:text-neutral-400">
+              </RevealHeading>
+              <p className="text-neutral-400">
                 More experiments and contributions to the ecosystem
               </p>
             </div>
@@ -144,7 +91,7 @@ export function ProjectsSection() {
 }
 
 interface ProjectCardProps {
-  project: typeof projectsData[0]
+  project: Project
   featured: boolean
   className?: string
 }
@@ -153,7 +100,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
   return (
     <m.article
       className={cn(
-        "group bg-neutral-50 dark:bg-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300",
+        "group bg-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300",
         className
       )}
       whileHover={{
@@ -165,7 +112,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
     >
       {/* Project Image */}
       <div className={cn(
-        "relative overflow-hidden bg-neutral-200 dark:bg-neutral-700",
+        "relative overflow-hidden bg-neutral-700",
         featured ? "aspect-video" : "aspect-hero"
       )}>
         {project.coverImage ? (
@@ -178,7 +125,7 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <div className="text-center text-neutral-500 dark:text-neutral-400">
+            <div className="text-center text-neutral-400">
               <Github size={48} className="mx-auto mb-2" />
               <p className="text-sm font-medium">{project.title}</p>
             </div>
@@ -210,13 +157,10 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
       {/* Project Content */}
       <div className={cn("space-y-3", featured ? "p-5" : "p-6")}>
         <div>
-          <h3 className={cn(
-            "font-bold text-neutral-900 dark:text-white mb-1.5",
-            featured ? "text-xl" : "text-xl"
-          )}>
+          <h3 className="font-bold text-white mb-1.5 text-xl">
             {project.title}
           </h3>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          <p className="text-sm text-neutral-300 leading-relaxed">
             {featured ? project.description : project.summary}
           </p>
         </div>
@@ -235,34 +179,34 @@ function ProjectCard({ project, featured, className }: ProjectCardProps) {
 
         {/* Links */}
         <div className="flex items-center space-x-4 pt-1">
-          {(project.links as any).github && (
+          {project.links.github && (
             <Link
-              href={(project.links as any).github}
+              href={project.links.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring py-2"
+              className="inline-flex items-center space-x-1 text-neutral-400 hover:text-white transition-colors focus-ring py-2"
             >
               <Github size={16} />
               <span className="text-sm">Code</span>
             </Link>
           )}
-          {(project.links as any).demo && (
+          {project.links.demo && (
             <Link
-              href={(project.links as any).demo}
+              href={project.links.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring py-2"
+              className="inline-flex items-center space-x-1 text-primary-400 hover:text-primary-300 transition-colors focus-ring py-2"
             >
               <ExternalLink size={16} />
               <span className="text-sm">Live Demo</span>
             </Link>
           )}
-          {(project.links as any).devpost && (
+          {project.links.devpost && (
             <Link
-              href={(project.links as any).devpost}
+              href={project.links.devpost}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring py-2"
+              className="inline-flex items-center space-x-1 text-accent-400 hover:text-accent-300 transition-colors focus-ring py-2"
             >
               <ExternalLink size={16} />
               <span className="text-sm">Devpost</span>

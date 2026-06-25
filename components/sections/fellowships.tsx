@@ -11,17 +11,13 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
+import { m, AnimatePresence } from 'framer-motion';
+import { gsap } from '@/lib/gsap';
 import { OptimizedImage } from '@/components/ui/image';
+import { RevealHeading } from '@/components/ui/reveal-heading';
+import { getPrefersReducedMotion } from '@/lib/hooks/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 import fellowshipsData from '@/data/fellowships.json';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 // Sort chronologically, oldest first
 const sortedFellowships = [...fellowshipsData].sort(
@@ -32,7 +28,6 @@ type Fellowship = (typeof fellowshipsData)[0];
 
 export function FellowshipsSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const lineWrapperRef = useRef<HTMLDivElement>(null);
@@ -55,35 +50,9 @@ export function FellowshipsSection() {
       lineWrapperRef.current.style.height = `${lastTop - firstTop}px`;
     }
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-    if (prefersReducedMotion) return;
+    if (getPrefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      // Title animation
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, {
-          types: 'chars',
-        });
-        gsap.fromTo(
-          splitTitle.chars,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: titleRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: 'power2.out',
-          }
-        );
-      }
-
       // Line drawing animation (scrub — tracks scroll, trigger = line wrapper)
       if (lineRef.current && lineWrapperRef.current) {
         gsap.fromTo(
@@ -202,22 +171,19 @@ export function FellowshipsSection() {
     <section
       ref={sectionRef}
       id="fellowships"
-      className="section-padding bg-white dark:bg-neutral-900 overflow-hidden"
+      className="section-padding bg-neutral-900 overflow-hidden"
     >
       <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 rounded-full text-sm font-medium">
+          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-primary-900/50 text-primary-200 rounded-full text-sm font-medium">
             <Award size={16} />
             <span>Fellowships & Programs</span>
           </div>
-          <h2
-            ref={titleRef}
-            className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
+          <RevealHeading as="h2" className="text-3xl md:text-4xl font-bold text-white mb-4">
             Recognized Excellence
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+          </RevealHeading>
+          <p className="text-lg text-neutral-300 max-w-3xl mx-auto">
             Selected for competitive fellowship programs that recognize
             outstanding contributions to Web3 development and the open source
             ecosystem.
@@ -266,13 +232,7 @@ export function FellowshipsSection() {
                   )}
 
                   {/* Entry row */}
-                  <div
-                    className={cn(
-                      'relative flex items-start',
-                      // Desktop: alternate sides
-                      'lg:items-start',
-                    )}
-                  >
+                  <div className="relative flex items-start lg:items-start">
                     {/* Node column — mobile: absolute left, desktop: center */}
                     <div
                       className={cn(
@@ -375,10 +335,12 @@ interface TimelineCardProps {
 }
 
 function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
+  const panelId = `fellowship-panel-${fellowship.id}`;
+
   return (
-    <motion.div
+    <m.div
       className={cn(
-        'glass-card rounded-xl overflow-hidden cursor-pointer',
+        'glass-card rounded-xl overflow-hidden',
         isExpanded && 'ring-1 ring-primary-400/20',
       )}
       whileHover={
@@ -391,22 +353,18 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
             }
           : undefined
       }
-      onClick={onToggle}
-      role="button"
-      tabIndex={0}
-      aria-expanded={isExpanded}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onToggle();
-        }
-      }}
     >
-      {/* Collapsed content — always visible */}
-      <div className="p-6">
+      {/* Collapsed content — the toggle button (only interactive control in the header) */}
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isExpanded}
+        aria-controls={panelId}
+        className="block w-full text-left p-6 cursor-pointer focus-ring"
+      >
         {/* Top row: logo + info + status */}
         <div className="flex items-start gap-4 mb-3">
-          <div className="w-12 h-12 shrink-0 bg-neutral-100 dark:bg-neutral-800 rounded-lg overflow-hidden">
+          <div className="w-12 h-12 shrink-0 bg-neutral-800 rounded-lg overflow-hidden">
             {fellowship.logo ? (
               <OptimizedImage
                 src={fellowship.logo}
@@ -418,19 +376,16 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Award
-                  size={20}
-                  className="text-neutral-500 dark:text-neutral-400"
-                />
+                <Award size={20} className="text-neutral-400" />
               </div>
             )}
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-bold text-neutral-900 dark:text-white leading-tight">
+            <h3 className="text-lg font-bold text-white leading-tight">
               {fellowship.program}
             </h3>
-            <p className="text-sm text-primary-600 dark:text-primary-400 font-medium">
+            <p className="text-sm text-primary-400 font-medium">
               {fellowship.organization}
             </p>
           </div>
@@ -446,7 +401,7 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
         </div>
 
         {/* Metadata row */}
-        <div className="flex flex-wrap gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+        <div className="flex flex-wrap gap-3 text-sm text-neutral-400 mb-3">
           <span className="inline-flex items-center gap-1">
             <Calendar size={13} />
             {fellowship.cohort}
@@ -466,7 +421,7 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
         {/* Description — clamped when collapsed */}
         <p
           className={cn(
-            'text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed',
+            'text-sm text-neutral-300 leading-relaxed',
             !isExpanded && 'line-clamp-2',
           )}
         >
@@ -487,23 +442,24 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
             )}
           </span>
         </div>
-      </div>
+      </button>
 
       {/* Expanded content */}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <m.div
+            id={panelId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-6 pb-6 space-y-5 border-t border-neutral-200/50 dark:border-neutral-700/50 pt-5">
+            <div className="px-6 pb-6 space-y-5 border-t border-neutral-700/50 pt-5">
               {/* Significance callout */}
               {fellowship.significance && (
-                <div className="p-3 bg-accent-50 dark:bg-accent-900/20 rounded-lg border-l-4 border-accent-500">
-                  <p className="text-accent-800 dark:text-accent-200 text-sm font-medium">
+                <div className="p-3 bg-accent-900/20 rounded-lg border-l-4 border-accent-500">
+                  <p className="text-accent-200 text-sm font-medium">
                     <strong>Notable:</strong> {fellowship.significance}
                   </p>
                 </div>
@@ -511,7 +467,7 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
 
               {/* Focus Areas */}
               <div>
-                <h4 className="text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+                <h4 className="text-sm font-semibold text-white mb-2">
                   Focus Areas
                 </h4>
                 <div className="flex flex-wrap gap-1.5">
@@ -525,14 +481,14 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
 
               {/* Key Achievements */}
               <div>
-                <h4 className="text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+                <h4 className="text-sm font-semibold text-white mb-2">
                   Key Achievements
                 </h4>
                 <ul className="space-y-1.5">
                   {fellowship.achievements.map((achievement, idx) => (
                     <li
                       key={idx}
-                      className="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-300"
+                      className="flex items-start gap-2 text-sm text-neutral-300"
                     >
                       <div className="w-1 h-1 bg-primary-500 rounded-full mt-2 shrink-0" />
                       {achievement}
@@ -542,16 +498,13 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
               </div>
 
               {/* Links */}
-              <div
-                className="flex flex-wrap gap-4 pt-3 border-t border-neutral-200/50 dark:border-neutral-700/50"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div className="flex flex-wrap gap-4 pt-3 border-t border-neutral-700/50">
                 {fellowship.links.program && (
                   <Link
                     href={fellowship.links.program}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-ring py-1"
+                    className="inline-flex items-center gap-1 text-sm text-primary-400 hover:text-primary-300 transition-colors focus-ring py-1"
                   >
                     Program Details
                     <ExternalLink size={12} />
@@ -562,7 +515,7 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
                     href={fellowship.links.profile}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors focus-ring py-1"
+                    className="inline-flex items-center gap-1 text-sm text-neutral-400 hover:text-white transition-colors focus-ring py-1"
                   >
                     My Profile
                     <ExternalLink size={12} />
@@ -573,7 +526,7 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
                     href={fellowship.links.scholarship}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring py-1"
+                    className="inline-flex items-center gap-1 text-sm text-accent-400 hover:text-accent-300 transition-colors focus-ring py-1"
                   >
                     Scholarship Info
                     <ExternalLink size={12} />
@@ -584,7 +537,7 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
                     href={fellowship.links.event}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-300 transition-colors focus-ring py-1"
+                    className="inline-flex items-center gap-1 text-sm text-accent-400 hover:text-accent-300 transition-colors focus-ring py-1"
                   >
                     Event Details
                     <ExternalLink size={12} />
@@ -592,10 +545,10 @@ function TimelineCard({ fellowship, isExpanded, onToggle }: TimelineCardProps) {
                 )}
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </m.div>
   );
 }
 
